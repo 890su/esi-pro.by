@@ -3,6 +3,7 @@
 type FormLocale = 'ru' | 'by' | 'en';
 
 interface Env {
+  EMAIL?: SendEmail;
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   RESEND_API_KEY?: string;
@@ -109,13 +110,24 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     source ? `Source: ${source}` : '',
   ].filter(Boolean).join('\n');
 
-  const deliveries: Promise<Response>[] = [];
+  const deliveries: Promise<boolean>[] = [];
+
+  if (env.EMAIL) {
+    deliveries.push(env.EMAIL.send({
+      from: { email: 'forms@esi-pro.by', name: 'ESIpro' },
+      to: 'bula.esi@gmail.com',
+      replyTo: email || undefined,
+      subject: `Новая заявка ESIpro — ${name}`,
+      text,
+    }).then(() => true));
+  }
+
   if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
     deliveries.push(fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text }),
-    }));
+    }).then((response) => response.ok));
   }
 
   if (env.RESEND_API_KEY && env.CONTACT_EMAIL && env.CONTACT_FROM_EMAIL) {
@@ -123,13 +135,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       method: 'POST',
       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: env.CONTACT_FROM_EMAIL, to: [env.CONTACT_EMAIL], subject: `ESIpro enquiry: ${name}`, text }),
-    }));
+    }).then((response) => response.ok));
   }
 
   if (!deliveries.length) return json({ ok: false, message: messageCopy.unavailable }, 503);
 
   const results = await Promise.allSettled(deliveries);
-  const delivered = results.some((result) => result.status === 'fulfilled' && result.value.ok);
+  const delivered = results.some((result) => result.status === 'fulfilled' && result.value);
   return delivered
     ? json({ ok: true, message: messageCopy.success })
     : json({ ok: false, message: messageCopy.failed }, 502);

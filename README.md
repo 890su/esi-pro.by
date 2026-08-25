@@ -32,7 +32,7 @@ Production-конфигурация хранится в `wrangler.jsonc`. Пос
 npm run deploy
 ```
 
-Секреты формы задаются в настройках Cloudflare Pages и не должны попадать в Git:
+Нативная отправка формы использует Cloudflare Email Sending binding `EMAIL`, ограниченный адресом `bula.esi@gmail.com`. Для резервных каналов секреты задаются в настройках Cloudflare Pages и не должны попадать в Git:
 
 ```text
 TELEGRAM_BOT_TOKEN
@@ -50,7 +50,9 @@ SEO включено на уровне общего layout: уникальные
 
 ## Подключение формы
 
-Для локального Pages preview скопируйте `.dev.vars.example` в `.dev.vars` и заполните хотя бы один канал доставки. В production добавьте те же имена как зашифрованные переменные Cloudflare Pages.
+Основной канал — Cloudflare Email Sending: домен `esi-pro.by` должен быть подключён в Email Service → Email Sending, а `bula.esi@gmail.com` подтверждён как destination address. Письма отправляются с `forms@esi-pro.by`; API-ключи в коде не требуются.
+
+Для локального Pages preview резервных каналов скопируйте `.dev.vars.example` в `.dev.vars`. В production добавьте нужные имена как зашифрованные переменные Cloudflare Pages.
 
 ### Telegram
 
@@ -69,7 +71,7 @@ CONTACT_EMAIL=team@example.by
 CONTACT_FROM_EMAIL=ESIpro <forms@example.by>
 ```
 
-`CONTACT_FROM_EMAIL` должен быть подтверждён в Resend. При заполнении обоих вариантов заявка уходит одновременно в Telegram и на email. Если каналы не настроены, форма честно сообщает посетителю номер телефона вместо имитации отправки.
+`CONTACT_FROM_EMAIL` должен быть подтверждён в Resend. При включении нескольких каналов заявка отправляется по каждому из них. Если ни один канал не настроен, форма честно сообщает посетителю номер телефона вместо имитации отправки.
 
 ## Структура
 
