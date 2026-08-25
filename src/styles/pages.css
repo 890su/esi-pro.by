@@ -7,7 +7,7 @@
 .hero-actions { display: flex; align-items: center; gap: 28px; }
 .home-hero-media { min-width: 0; min-height: 520px; position: relative; display: grid; place-items: center; overflow: visible; background: transparent; }
 .home-hero-media::before { content: ''; position: absolute; inset: 0; display: none; background-image: linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px); background-size: 32px 32px; }
-.home-hero-media img { width: 100%; max-height: 560px; position: relative; transform: translateX(20px); object-fit: contain; }
+.home-hero-media img { width: 100%; max-height: 560px; position: relative; transform: translateX(40px); object-fit: contain; }
 .home-hero-media figcaption { position: absolute; right: 0; bottom: 0; max-width: 310px; padding: 14px 18px; background: var(--navy); color: var(--white); font-size: 13px; }
 .technical-tag { position: absolute; z-index: 2; left: 20px; top: 20px; display: flex; align-items: center; gap: 12px; transform: translateX(20px); padding: 9px 12px; background: var(--white); box-shadow: var(--shadow); }
 .technical-tag span { color: var(--blue); font-size: 13px; font-weight: 700; }
