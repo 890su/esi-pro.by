@@ -10,8 +10,10 @@
     "check": "astro check",
     "build": "astro build",
     "verify": "npm run check && npm run build",
-    "preview": "wrangler pages dev dist",
-    "deploy": "npm run verify && wrangler pages deploy dist --project-name=esi-pro-by",
+    "preview": "wrangler pages dev -c wrangler.jsonc -c email-worker/wrangler.jsonc",
+    "deploy:email": "wrangler deploy -c email-worker/wrangler.jsonc",
+    "deploy:pages": "wrangler pages deploy dist --project-name=esi-pro-by",
+    "deploy": "npm run verify && npm run deploy:email && npm run deploy:pages",
     "astro": "astro"
   },
   "dependencies": {

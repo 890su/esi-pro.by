@@ -3,7 +3,7 @@
 type FormLocale = 'ru' | 'by' | 'en';
 
 interface Env {
-  EMAIL?: SendEmail;
+  EMAIL_SERVICE?: Fetcher;
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   RESEND_API_KEY?: string;
@@ -112,14 +112,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const deliveries: Promise<boolean>[] = [];
 
-  if (env.EMAIL) {
-    deliveries.push(env.EMAIL.send({
-      from: { email: 'forms@esi-pro.by', name: 'ESIpro' },
-      to: 'bula.esi@gmail.com',
-      replyTo: email || undefined,
-      subject: `Новая заявка ESIpro — ${name}`,
-      text,
-    }).then(() => true));
+  if (env.EMAIL_SERVICE) {
+    deliveries.push(env.EMAIL_SERVICE.fetch('https://email.internal/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, replyTo: email, text }),
+    }).then((response) => response.ok));
   }
 
   if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {

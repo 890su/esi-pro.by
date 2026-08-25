@@ -4,10 +4,10 @@
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-08-25",
   "compatibility_flags": ["nodejs_compat"],
-  "send_email": [
+  "services": [
     {
-      "name": "EMAIL",
-      "destination_address": "bula.esi@gmail.com"
+      "binding": "EMAIL_SERVICE",
+      "service": "esi-pro-email"
     }
   ],
   "send_metrics": false

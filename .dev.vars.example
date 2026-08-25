@@ -1,8 +1,8 @@
 # Copy this file to .dev.vars for local Cloudflare Pages preview only.
 # Never commit real credentials.
-# Native Cloudflare Email Sending uses the EMAIL binding from wrangler.jsonc.
-# It requires the esi-pro.by sender domain and bula.esi@gmail.com recipient
-# to be enabled and verified in Cloudflare Email Service.
+# Native Cloudflare Email Sending runs in the service-bound esi-pro-email Worker.
+# It requires the esi-pro.by sender domain and bula.esi@gmail.com recipient to be
+# enabled and verified in Cloudflare Email Service. No email secret is required.
 
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
