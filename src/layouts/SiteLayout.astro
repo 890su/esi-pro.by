@@ -29,7 +29,7 @@ const {
   additionalSchema,
 } = Astro.props;
 const copy = messages[locale];
-const site = Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://esipro.by');
+const site = Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://esi-pro.by');
 const canonicalUrl = new URL(localizePath(locale, currentSlug), site);
 const imageUrl = new URL(image, site);
 const fullTitle = currentSlug ? `${title} — ESIpro` : title;

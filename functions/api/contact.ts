@@ -99,7 +99,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const directionLabel = { boiler: 'Boiler plant', drying: 'Drying system', other: 'Other' }[direction];
   const text = [
-    'New enquiry from esipro.by',
+    'New enquiry from esi-pro.by',
     `Language: ${locale.toUpperCase()}`,
     `Name: ${name}`,
     `Phone: ${phone}`,
