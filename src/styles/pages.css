@@ -5,11 +5,11 @@
 .home-hero h1 { max-width: 720px; }
 .hero-lead { max-width: 620px; margin-bottom: 30px; color: var(--muted); font-size: clamp(18px, 1.8vw, 21px); line-height: 1.58; }
 .hero-actions { display: flex; align-items: center; gap: 28px; }
-.home-hero-media { min-width: 0; min-height: 520px; position: relative; display: grid; place-items: center; overflow: hidden; background: transparent; }
+.home-hero-media { min-width: 0; min-height: 520px; position: relative; display: grid; place-items: center; overflow: visible; background: transparent; }
 .home-hero-media::before { content: ''; position: absolute; inset: 0; display: none; background-image: linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px); background-size: 32px 32px; }
-.home-hero-media img { width: 100%; max-height: 560px; position: relative; object-fit: contain; }
+.home-hero-media img { width: 100%; max-height: 560px; position: relative; transform: translateX(20px); object-fit: contain; }
 .home-hero-media figcaption { position: absolute; right: 0; bottom: 0; max-width: 310px; padding: 14px 18px; background: var(--navy); color: var(--white); font-size: 13px; }
-.technical-tag { position: absolute; z-index: 2; left: 20px; top: 20px; display: flex; align-items: center; gap: 12px; padding: 9px 12px; background: var(--white); box-shadow: var(--shadow); }
+.technical-tag { position: absolute; z-index: 2; left: 20px; top: 20px; display: flex; align-items: center; gap: 12px; transform: translateX(20px); padding: 9px 12px; background: var(--white); box-shadow: var(--shadow); }
 .technical-tag span { color: var(--blue); font-size: 13px; font-weight: 700; }
 .technical-tag b { color: var(--navy); font: 700 14px/1 var(--display); }
 
@@ -182,8 +182,9 @@
   .home-hero::before { display: none; }
   .home-hero-grid, .about-band-grid, .equipment-detail-grid, .technical-overview-grid, .contacts-grid { grid-template-columns: 1fr; gap: 46px; }
   .home-hero-copy { padding-right: 0; }
-  .home-hero-media { min-height: 420px; background: var(--hero-steel); }
+  .home-hero-media { min-height: 420px; overflow: hidden; background: var(--hero-steel); }
   .home-hero-media::before { display: block; }
+  .home-hero-media img, .technical-tag { transform: none; }
   .review-strip, .process-list, .value-grid { grid-template-columns: repeat(2, 1fr); }
   .review-teaser:nth-child(2) { border-right: 0; }
   .process-list li:nth-child(2) { border-right: 0; }
