@@ -1,0 +1,29 @@
+---
+import ContactBand from '../ContactBand.astro';
+import EquipmentCard from '../EquipmentCard.astro';
+import PageHero from '../PageHero.astro';
+import { equipment } from '../../data/content';
+import { localizePath, messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<PageHero locale={locale} title={copy.catalog.title} intro={copy.catalog.intro} />
+<section class="section category-overview">
+  <div class="container category-grid">
+    <a href={localizePath(locale, 'catalog/boiler-houses')} class="category-panel category-boiler">
+      <div><span>01</span><h2>{copy.catalog.boilersTitle}</h2><p>{copy.catalog.boilersText}</p><b>{copy.common.more} →</b></div>
+      <img src="/images/slider-1.png" alt="" width="1920" height="1080" loading="lazy" />
+    </a>
+    <a href={localizePath(locale, 'catalog/drying-complexes')} class="category-panel category-drying">
+      <div><span>02</span><h2>{copy.catalog.dryingTitle}</h2><p>{copy.catalog.dryingText}</p><b>{copy.common.more} →</b></div>
+      <img src="/images/catalog/sk-gallery.jpg" alt="" width="905" height="460" loading="lazy" />
+    </a>
+  </div>
+</section>
+<section class="section section-soft">
+  <div class="container section-heading split-heading"><div><p class="section-kicker">HAMECH</p><h2>{copy.home.catalogTitle}</h2></div><p>{copy.catalog.source}</p></div>
+  <div class="container equipment-grid">{equipment.map((item) => <EquipmentCard item={item} locale={locale} />)}</div>
+</section>
+<ContactBand locale={locale} />

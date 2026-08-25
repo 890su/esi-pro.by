@@ -1,0 +1,22 @@
+---
+import ContactBand from '../ContactBand.astro';
+import PageHero from '../PageHero.astro';
+import { documents, localized } from '../../data/content';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<PageHero locale={locale} title={copy.documents.title} intro={copy.documents.intro} />
+<section class="section">
+  <div class="container documents-list">
+    {documents.map((document) => (
+      <article class="document-row">
+        <div><p class="card-meta">{document.date}</p><h2>{localized(document.title, locale)}</h2>{document.type === 'historical' && <p class="document-warning">{copy.documents.historical}</p>}</div>
+        <a class="button button-outline" href={document.file} target="_blank">{copy.common.download}<span aria-hidden="true">↗</span></a>
+      </article>
+    ))}
+  </div>
+</section>
+<ContactBand locale={locale} />

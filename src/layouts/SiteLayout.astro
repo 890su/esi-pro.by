@@ -1,0 +1,130 @@
+---
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '../styles/global.css';
+import '../styles/pages.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { localeMeta, locales, localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  currentSlug: string;
+  image?: string;
+  schemaType?: 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage';
+  additionalSchema?: Record<string, unknown>;
+}
+
+const {
+  locale,
+  title,
+  description,
+  currentSlug,
+  image = '/images/slider-1.png',
+  schemaType = 'WebPage',
+  additionalSchema,
+} = Astro.props;
+const copy = messages[locale];
+const site = Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://esipro.by');
+const canonicalUrl = new URL(localizePath(locale, currentSlug), site);
+const imageUrl = new URL(image, site);
+const fullTitle = currentSlug ? `${title} — ESIpro` : title;
+const organizationId = new URL('/#organization', site).toString();
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': organizationId,
+    name: 'ESIpro',
+    alternateName: 'Энергостройинвест-ПРО',
+    url: site.toString(),
+    telephone: '+375296507779',
+    email: 'bula.esi@gmail.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'ул. Прушинских, 70/74',
+      addressLocality: 'Минск',
+      postalCode: '220112',
+      addressCountry: 'BY',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    name: title,
+    description,
+    url: canonicalUrl.toString(),
+    inLanguage: localeMeta[locale].htmlLang,
+    about: { '@id': organizationId },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: copy.common.home,
+        item: new URL(localizePath(locale, ''), site).toString(),
+      },
+      ...(currentSlug
+        ? [{
+            '@type': 'ListItem',
+            position: 2,
+            name: title,
+            item: canonicalUrl.toString(),
+          }]
+        : []),
+    ],
+  },
+  ...(additionalSchema ? [{ '@context': 'https://schema.org', ...additionalSchema }] : []),
+];
+---
+
+<!doctype html>
+<html lang={localeMeta[locale].htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#002a55" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+    {locales.map((alternateLocale) => (
+      <link
+        rel="alternate"
+        hreflang={localeMeta[alternateLocale].htmlLang}
+        href={new URL(localizePath(alternateLocale, currentSlug), site)}
+      />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath('ru', currentSlug), site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ESIpro" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:locale" content={localeMeta[locale].htmlLang.replace('-', '_')} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <title>{fullTitle}</title>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{copy.common.more}</a>
+    <Header locale={locale} currentSlug={currentSlug} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

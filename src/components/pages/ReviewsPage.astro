@@ -1,0 +1,25 @@
+---
+import ContactBand from '../ContactBand.astro';
+import PageHero from '../PageHero.astro';
+import { localized, reviews } from '../../data/content';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<PageHero locale={locale} title={copy.reviews.title} intro={copy.reviews.intro} />
+<section class="section">
+  <div class="container reviews-grid">
+    {reviews.map((review) => (
+      <article class="review-card">
+        <a class="review-document" href={review.image} target="_blank" aria-label={`${copy.reviews.open}: ${review.organization}`}>
+          <img src={review.image} alt={`${review.organization}, ${review.year}`} width="900" height="1200" loading="lazy" />
+          <span>{copy.reviews.open} ↗</span>
+        </a>
+        <div><p class="card-meta">{review.year}</p><h2>{review.organization}</h2><h3>{localized(review.subject, locale)}</h3><p>{localized(review.summary, locale)}</p></div>
+      </article>
+    ))}
+  </div>
+</section>
+<ContactBand locale={locale} />

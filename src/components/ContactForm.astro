@@ -1,0 +1,60 @@
+---
+import { localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props { locale: Locale; source?: string; preset?: string }
+const { locale, source = '', preset = '' } = Astro.props;
+const copy = messages[locale];
+---
+
+<form class="contact-form" data-contact-form novalidate>
+  <input type="hidden" name="locale" value={locale} />
+  <input type="hidden" name="source" value={source} />
+  <label class="hidden-field" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+  <div class="form-grid">
+    <label>{copy.contacts.name}<input name="name" autocomplete="name" required maxlength="100" /></label>
+    <label>{copy.contacts.phone}<input name="phone" type="tel" autocomplete="tel" required maxlength="50" /></label>
+  </div>
+  <label>{copy.contacts.email}<input name="email" type="email" autocomplete="email" maxlength="150" /></label>
+  <label>{copy.contacts.direction}
+    <select name="direction" required>
+      <option value="" selected={!preset} disabled>{copy.contacts.directionPlaceholder}</option>
+      <option value="boiler" selected={preset === 'boiler'}>{copy.contacts.boiler}</option>
+      <option value="drying" selected={preset === 'drying'}>{copy.contacts.drying}</option>
+      <option value="other" selected={preset === 'other'}>{copy.contacts.other}</option>
+    </select>
+  </label>
+  <label>{copy.contacts.message}<textarea name="message" rows="5" maxlength="1200"></textarea></label>
+  <label class="consent-field"><input name="consent" type="checkbox" value="yes" required /><span>{copy.contacts.consent}. <a href={localizePath(locale, 'privacy')}>{copy.contacts.privacy}</a>.</span></label>
+  <button class="button button-primary" type="submit" data-submit>{copy.contacts.submit}<span aria-hidden="true">→</span></button>
+  <p class="form-status" aria-live="polite" data-form-status data-sending={copy.contacts.sending}></p>
+</form>
+
+<script>
+  document.querySelectorAll('[data-contact-form]').forEach((element) => {
+    if (!(element instanceof HTMLFormElement) || element.dataset.bound === 'true') return;
+    element.dataset.bound = 'true';
+    const status = element.querySelector('[data-form-status]');
+    const submit = element.querySelector('[data-submit]');
+    element.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!(status instanceof HTMLElement) || !(submit instanceof HTMLButtonElement)) return;
+      if (!element.reportValidity()) return;
+      submit.disabled = true;
+      status.classList.remove('is-error');
+      status.textContent = status.dataset.sending || '';
+      try {
+        const response = await fetch('/api/contact', { method: 'POST', body: new FormData(element) });
+        const result = await response.json() as { message?: string };
+        status.textContent = result.message || '';
+        status.classList.toggle('is-error', !response.ok);
+        if (response.ok) element.reset();
+      } catch {
+        const locale = String(new FormData(element).get('locale') || 'ru');
+        status.textContent = locale === 'en' ? 'Could not send the request. Please call +375 (29) 650-77-79.' : locale === 'by' ? 'Не ўдалося адправіць запыт. Патэлефануйце +375 (29) 650-77-79.' : 'Не удалось отправить запрос. Позвоните +375 (29) 650-77-79.';
+        status.classList.add('is-error');
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  });
+</script>

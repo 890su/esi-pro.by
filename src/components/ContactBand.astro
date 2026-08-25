@@ -1,0 +1,24 @@
+---
+import { localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+const headings = {
+  ru: 'Обсудим параметры вашего объекта',
+  by: 'Абмяркуем параметры вашага аб’екта',
+  en: 'Let’s discuss your project requirements',
+};
+const text = {
+  ru: 'Расскажите о топливе, нагрузке или требуемой загрузке сушильных камер — определим, какие данные нужны для расчёта.',
+  by: 'Раскажыце пра паліва, нагрузку або патрэбную загрузку сушыльных камер — вызначым, якія даныя патрэбны для разліку.',
+  en: 'Tell us about the fuel, heat load or required drying capacity and we will define the input data needed for calculation.',
+};
+---
+
+<section class="contact-band">
+  <div class="container contact-band-grid">
+    <div><p class="section-kicker">ESIpro</p><h2>{headings[locale]}</h2></div>
+    <div><p>{text[locale]}</p><a class="button button-white" href={localizePath(locale, 'contacts')}>{copy.common.discuss}<span aria-hidden="true">→</span></a></div>
+  </div>
+</section>

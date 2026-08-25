@@ -1,0 +1,15 @@
+---
+import PageHero from '../PageHero.astro';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+const points = {
+  ru: ['Обрабатываются имя, телефон, email, выбранное направление и текст обращения.', 'Цель обработки — связаться с отправителем и подготовить ответ или предложение.', 'Для доставки сообщения могут использоваться Telegram и email-сервис, настроенные владельцем сайта.', 'Запрос на удаление данных можно направить на bula.esi@gmail.com.'],
+  by: ['Апрацоўваюцца імя, тэлефон, email, выбраны напрамак і тэкст звароту.', 'Мэта апрацоўкі — звязацца з адпраўніком і падрыхтаваць адказ або прапанову.', 'Для дастаўкі паведамлення могуць выкарыстоўвацца Telegram і email-сэрвіс, наладжаныя ўладальнікам сайта.', 'Запыт на выдаленне даных можна накіраваць на bula.esi@gmail.com.'],
+  en: ['The form processes name, phone, email, selected area and enquiry text.', 'The purpose is to contact the sender and prepare a response or proposal.', 'Telegram and an email delivery service configured by the site owner may be used to deliver the message.', 'A data deletion request can be sent to bula.esi@gmail.com.'],
+};
+---
+
+<PageHero locale={locale} title={copy.privacy.title} intro={copy.privacy.body} />
+<section class="section"><div class="container legal-prose"><h2>{copy.privacy.title}</h2><ul>{points[locale].map((point) => <li>{point}</li>)}</ul><p>Contact: <a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a></p></div></section>

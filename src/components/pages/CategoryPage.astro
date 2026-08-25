@@ -1,0 +1,32 @@
+---
+import ContactBand from '../ContactBand.astro';
+import EquipmentCard from '../EquipmentCard.astro';
+import PageHero from '../PageHero.astro';
+import { equipmentForCategory, type EquipmentCategory } from '../../data/content';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale; category: EquipmentCategory }
+const { locale, category } = Astro.props;
+const copy = messages[locale];
+const page = copy.categories[category];
+const categoryItems = equipmentForCategory(category);
+const gasNotes = {
+  ru: ['Тепловая нагрузка и температурный график', 'Доступное давление газа и точка подключения', 'Требования к резервированию и автоматике', 'Помещение, дымоудаление и действующие нормы'],
+  by: ['Цеплавая нагрузка і тэмпературны графік', 'Даступны ціск газу і кропка падключэння', 'Патрабаванні да рэзервавання і аўтаматыкі', 'Памяшканне, дымаадвод і дзеючыя нормы'],
+  en: ['Heat load and temperature schedule', 'Available gas pressure and connection point', 'Redundancy and control requirements', 'Plant room, flue system and applicable standards'],
+};
+---
+
+<PageHero locale={locale} title={page.title} intro={page.intro} parent={{ label: copy.nav.catalog, path: 'catalog' }} />
+{category === 'boiler' && (
+  <section class="section gas-solution">
+    <div class="container editorial-grid">
+      <div><p class="section-kicker">Gas</p><h2>{copy.home.boilerTitle}</h2><p class="lead-paragraph">{page.description}</p></div>
+      <ul>{gasNotes[locale].map((note) => <li>{note}</li>)}</ul>
+    </div>
+  </section>
+)}
+<section class:list={['section', { 'section-soft': category === 'boiler' }]}>
+  <div class="container section-heading split-heading"><div><p class="section-kicker">HAMECH</p><h2>{category === 'boiler' ? ({ ru: 'Биотопливо', by: 'Біяпаліва', en: 'Biofuel' }[locale]) : 'SK / DQK'}</h2></div><p>{copy.catalog.source}</p></div>
+  <div class="container equipment-grid">{categoryItems.map((item) => <EquipmentCard item={item} locale={locale} />)}</div>
+</section>
+<ContactBand locale={locale} />

@@ -1,0 +1,37 @@
+---
+import { localized, type CatalogVisual } from '../data/content';
+import type { Locale } from '../data/i18n';
+
+interface Props {
+  locale: Locale;
+  visuals: CatalogVisual[];
+}
+
+const { locale, visuals } = Astro.props;
+const labels = {
+  ru: { photo: 'Фото', scheme: 'Схема', detail: 'Узел', open: 'Открыть изображение' },
+  by: { photo: 'Фота', scheme: 'Схема', detail: 'Вузел', open: 'Адкрыць выяву' },
+  en: { photo: 'Photo', scheme: 'Diagram', detail: 'Detail', open: 'Open image' },
+}[locale];
+---
+
+<div class="equipment-gallery">
+  {visuals.map((visual, index) => (
+    <figure class:list={['equipment-visual', { 'equipment-visual-primary': index === 0 }]}>
+      <a href={visual.src} target="_blank" rel="noopener" aria-label={`${labels.open}: ${localized(visual.caption, locale)}`}>
+        <img
+          src={visual.src}
+          alt={localized(visual.alt, locale)}
+          width="1200"
+          height="800"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+      <figcaption>
+        <span>{labels[visual.kind]}</span>
+        <p>{localized(visual.caption, locale)}</p>
+      </figcaption>
+    </figure>
+  ))}
+</div>

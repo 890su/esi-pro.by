@@ -1,0 +1,99 @@
+---
+import { locales, localeMeta, localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props {
+  locale: Locale;
+  currentSlug: string;
+}
+
+const { locale, currentSlug } = Astro.props;
+const copy = messages[locale];
+const nav = [
+  { key: 'about', path: 'about', label: copy.nav.about },
+  { key: 'catalog', path: 'catalog', label: copy.nav.catalog },
+  { key: 'services', path: 'services', label: copy.nav.services },
+  { key: 'objects', path: 'objects', label: copy.nav.objects },
+  { key: 'reviews', path: 'reviews', label: copy.nav.reviews },
+  { key: 'contacts', path: 'contacts', label: copy.nav.contacts },
+];
+const isActive = (path: string) => currentSlug === path || currentSlug.startsWith(`${path}/`);
+---
+
+<header class="site-header" data-site-header>
+  <div class="header-shell container">
+    <a class="brand-lockup" href={localizePath(locale)} aria-label="ESIpro — home">
+      <span class="esi-wordmark"><b>ESI</b><span>pro</span></span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <img src="/images/logo-hamech.png" width="107" height="75" alt="HAMECH" />
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-controls="primary-navigation"
+      aria-expanded="false"
+      aria-label={copy.nav.menuOpen}
+      data-menu-toggle
+    >
+      <span class="menu-toggle-label" data-open-label={copy.nav.menuOpen} data-close-label={copy.nav.menuClose}>{copy.nav.menuOpen}</span>
+      <span class="menu-icon" aria-hidden="true"><i></i><i></i></span>
+    </button>
+
+    <div class="navigation-panel" id="primary-navigation" data-navigation-panel>
+      <nav class="primary-navigation" aria-label="Primary">
+        {nav.map((item) => (
+          <a
+            href={localizePath(locale, item.path)}
+            class:list={{ active: isActive(item.path) }}
+            aria-current={isActive(item.path) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <div class="language-switcher" aria-label={copy.nav.languages}>
+        {locales.map((item) => (
+          <a
+            href={localizePath(item, currentSlug)}
+            lang={localeMeta[item].htmlLang}
+            class:list={{ active: item === locale }}
+            aria-current={item === locale ? 'true' : undefined}
+          >
+            {localeMeta[item].label}
+          </a>
+        ))}
+      </div>
+      <a class="header-contact" href="tel:+375296507779">+375 29 650-77-79</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  const toggle = header?.querySelector('[data-menu-toggle]');
+  const panel = header?.querySelector('[data-navigation-panel]');
+  const label = toggle?.querySelector('.menu-toggle-label');
+
+  const setMenu = (open: boolean) => {
+    if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    const menuLabel = label instanceof HTMLElement
+      ? (open ? label.dataset.closeLabel : label.dataset.openLabel)
+      : undefined;
+    toggle.setAttribute('aria-label', menuLabel || 'Menu');
+    panel.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    if (label instanceof HTMLElement) {
+      label.textContent = (open ? label.dataset.closeLabel : label.dataset.openLabel) || '';
+    }
+  };
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  panel?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      if (toggle instanceof HTMLButtonElement) toggle.focus();
+    }
+  });
+</script>

@@ -1,0 +1,82 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import AboutPage from '../../components/pages/AboutPage.astro';
+import CatalogPage from '../../components/pages/CatalogPage.astro';
+import CategoryPage from '../../components/pages/CategoryPage.astro';
+import ContactsPage from '../../components/pages/ContactsPage.astro';
+import DocumentsPage from '../../components/pages/DocumentsPage.astro';
+import EquipmentPage from '../../components/pages/EquipmentPage.astro';
+import HomePage from '../../components/pages/HomePage.astro';
+import ObjectDetailPage from '../../components/pages/ObjectDetailPage.astro';
+import ObjectsPage from '../../components/pages/ObjectsPage.astro';
+import PrivacyPage from '../../components/pages/PrivacyPage.astro';
+import ReviewsPage from '../../components/pages/ReviewsPage.astro';
+import ServicesPage from '../../components/pages/ServicesPage.astro';
+import { equipment, localized } from '../../data/content';
+import { messages, type Locale } from '../../data/i18n';
+import { staticRouteParams, type RouteDefinition } from '../../data/routes';
+
+export const prerender = true;
+export const getStaticPaths = () => staticRouteParams;
+
+interface Props { locale: Locale; route: RouteDefinition }
+const { locale, route } = Astro.props as Props;
+const copy = messages[locale];
+const equipmentItem = route.kind === 'equipment' ? equipment.find((item) => item.slug === route.id) : undefined;
+
+const metadata = (() => {
+  switch (route.kind) {
+    case 'home': return { title: copy.home.seoTitle, description: copy.home.seoDescription, schemaType: 'WebPage' as const };
+    case 'about': return { title: copy.about.title, description: copy.about.description, schemaType: 'AboutPage' as const };
+    case 'catalog': return { title: copy.catalog.title, description: copy.catalog.description, schemaType: 'CollectionPage' as const };
+    case 'category': {
+      const category = route.id === 'drying' ? copy.categories.drying : copy.categories.boiler;
+      return { title: category.title, description: category.description, schemaType: 'CollectionPage' as const };
+    }
+    case 'equipment': return { title: equipmentItem ? localized(equipmentItem.title, locale) : copy.catalog.title, description: equipmentItem ? localized(equipmentItem.summary, locale) : copy.catalog.description, schemaType: 'WebPage' as const };
+    case 'services': return { title: copy.services.title, description: copy.services.description, schemaType: 'WebPage' as const };
+    case 'objects': return { title: copy.objects.title, description: copy.objects.description, schemaType: 'CollectionPage' as const };
+    case 'object': return { title: copy.objects.detailTitle, description: copy.objects.detailDescription, schemaType: 'WebPage' as const };
+    case 'reviews': return { title: copy.reviews.title, description: copy.reviews.description, schemaType: 'CollectionPage' as const };
+    case 'documents': return { title: copy.documents.title, description: copy.documents.description, schemaType: 'CollectionPage' as const };
+    case 'contacts': return { title: copy.contacts.title, description: copy.contacts.description, schemaType: 'ContactPage' as const };
+    case 'privacy': return { title: copy.privacy.title, description: copy.privacy.description, schemaType: 'WebPage' as const };
+  }
+})();
+
+const additionalSchema = equipmentItem
+  ? {
+      '@type': 'Product',
+      name: localized(equipmentItem.title, locale),
+      model: equipmentItem.model,
+      description: localized(equipmentItem.summary, locale),
+      brand: { '@type': 'Brand', name: 'HAMECH' },
+      manufacturer: { '@type': 'Organization', name: 'HAMECH' },
+      category: equipmentItem.category === 'boiler' ? copy.categories.boiler.title : copy.categories.drying.title,
+      image: equipmentItem.image,
+    }
+  : route.kind === 'services'
+    ? {
+        '@type': 'Service',
+        name: copy.services.title,
+        description: copy.services.description,
+        provider: { '@id': 'https://esipro.by/#organization' },
+        areaServed: { '@type': 'Country', name: 'Belarus' },
+      }
+    : undefined;
+---
+
+<SiteLayout locale={locale} title={metadata.title} description={metadata.description} currentSlug={route.slug} schemaType={metadata.schemaType} additionalSchema={additionalSchema}>
+  {route.kind === 'home' && <HomePage locale={locale} />}
+  {route.kind === 'about' && <AboutPage locale={locale} />}
+  {route.kind === 'catalog' && <CatalogPage locale={locale} />}
+  {route.kind === 'category' && <CategoryPage locale={locale} category={route.id === 'drying' ? 'drying' : 'boiler'} />}
+  {route.kind === 'equipment' && equipmentItem && <EquipmentPage locale={locale} item={equipmentItem} />}
+  {route.kind === 'services' && <ServicesPage locale={locale} />}
+  {route.kind === 'objects' && <ObjectsPage locale={locale} />}
+  {route.kind === 'object' && <ObjectDetailPage locale={locale} />}
+  {route.kind === 'reviews' && <ReviewsPage locale={locale} />}
+  {route.kind === 'documents' && <DocumentsPage locale={locale} />}
+  {route.kind === 'contacts' && <ContactsPage locale={locale} />}
+  {route.kind === 'privacy' && <PrivacyPage locale={locale} />}
+</SiteLayout>

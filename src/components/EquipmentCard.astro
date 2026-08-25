@@ -1,0 +1,31 @@
+---
+import type { EquipmentItem } from '../data/content';
+import { formatTechnicalValue, localized } from '../data/content';
+import { localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props { item: EquipmentItem; locale: Locale }
+const { item, locale } = Astro.props;
+const copy = messages[locale];
+const displayRange = formatTechnicalValue(item.range, locale);
+const mediaLabel = locale === 'ru'
+  ? `${item.gallery.length} ${item.gallery.length === 5 ? 'материалов' : 'материала'}`
+  : locale === 'by'
+    ? `${item.gallery.length} ${item.gallery.length === 5 ? 'матэрыялаў' : 'матэрыялы'}`
+    : `${item.gallery.length} visuals`;
+const specValue = (value: string | Record<Locale, string>) => formatTechnicalValue(value, locale);
+---
+
+<article class="equipment-card">
+  <a class="equipment-card-media" href={localizePath(locale, `catalog/equipment/${item.slug}`)} tabindex="-1" aria-hidden="true">
+    <img src={item.image} alt="" width="720" height="480" loading="lazy" />
+    <span>{item.model}</span>
+    <b>{mediaLabel}</b>
+  </a>
+  <div class="equipment-card-body">
+    <p class="card-meta">{displayRange}</p>
+    <h3><a href={localizePath(locale, `catalog/equipment/${item.slug}`)}>{localized(item.title, locale)}</a></h3>
+    <p>{localized(item.summary, locale)}</p>
+    <dl>{item.specs.slice(0, 2).map((spec) => <div><dt>{localized(spec.label, locale)}</dt><dd>{specValue(spec.value)}</dd></div>)}</dl>
+    <a class="arrow-link" href={localizePath(locale, `catalog/equipment/${item.slug}`)}>{copy.common.more}<span aria-hidden="true">→</span></a>
+  </div>
+</article>

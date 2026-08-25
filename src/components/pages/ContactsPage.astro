@@ -1,0 +1,24 @@
+---
+import ContactForm from '../ContactForm.astro';
+import PageHero from '../PageHero.astro';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+const interest = Astro.url.searchParams.get('interest') || '';
+---
+
+<PageHero locale={locale} title={copy.contacts.title} intro={copy.contacts.intro} />
+<section class="section contacts-page">
+  <div class="container contacts-grid">
+    <div class="contact-details">
+      <p class="section-kicker">ESIpro</p>
+      <h2>{copy.contacts.formTitle}</h2>
+      <a class="contact-primary" href="tel:+375296507779">+375 (29) 650-77-79</a>
+      <a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a>
+      <address>220112, г. Минск<br />ул. Прушинских, 70/74</address>
+      <p>{copy.common.represented}</p>
+    </div>
+    <ContactForm locale={locale} source={`/${locale}/contacts/`} preset={interest} />
+  </div>
+</section>

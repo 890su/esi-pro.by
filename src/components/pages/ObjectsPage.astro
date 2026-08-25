@@ -1,0 +1,44 @@
+---
+import ContactBand from '../ContactBand.astro';
+import ObjectCard from '../ObjectCard.astro';
+import PageHero from '../PageHero.astro';
+import { projects } from '../../data/content';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<PageHero locale={locale} title={copy.objects.title} intro={copy.objects.intro} />
+<section class="section objects-section">
+  <div class="container object-summary">
+    <div><strong>14</strong><span>{copy.objects.filterBoiler}<small>{copy.common.sourceDate}</small></span></div>
+    <div><strong>16</strong><span>{copy.objects.filterDrying}<small>{copy.common.sourceDate}</small></span></div>
+    <div><strong>5 550</strong><span>кВт<small>Слоним</small></span></div>
+  </div>
+  <div class="container filter-bar" role="group" aria-label="Project filters">
+    <button class="active" type="button" data-filter="all">{copy.objects.filterAll}</button>
+    <button type="button" data-filter="boiler">{copy.objects.filterBoiler}</button>
+    <button type="button" data-filter="drying">{copy.objects.filterDrying}</button>
+    <button type="button" data-filter="combined">{copy.objects.filterCombined}</button>
+  </div>
+  <div class="container object-grid" data-object-grid>
+    {projects.map((project) => <ObjectCard project={project} locale={locale} linkDetail />)}
+  </div>
+</section>
+<ContactBand locale={locale} />
+
+<script>
+  const filters = document.querySelectorAll('[data-filter]');
+  const cards = document.querySelectorAll('[data-object-grid] [data-kind]');
+  filters.forEach((button) => button.addEventListener('click', () => {
+    if (!(button instanceof HTMLButtonElement)) return;
+    const filter = button.dataset.filter;
+    filters.forEach((item) => item.classList.toggle('active', item === button));
+    cards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) return;
+      const visible = filter === 'all' || card.dataset.kind === filter || (filter === 'drying' && card.dataset.kind === 'combined');
+      card.hidden = !visible;
+    });
+  }));
+</script>

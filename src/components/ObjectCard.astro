@@ -1,0 +1,34 @@
+---
+import type { ProjectObject } from '../data/content';
+import { localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props { project: ProjectObject; locale: Locale; linkDetail?: boolean }
+const { project, locale, linkDetail = false } = Astro.props;
+const copy = messages[locale];
+const kindLabels = {
+  ru: { boiler: 'Котельная', drying: 'Сушильный комплекс', combined: 'Комбинированный комплекс' },
+  by: { boiler: 'Кацельня', drying: 'Сушыльны комплекс', combined: 'Камбінаваны комплекс' },
+  en: { boiler: 'Boiler plant', drying: 'Drying system', combined: 'Combined system' },
+};
+const displayCapacity = locale === 'en' ? project.capacity.replaceAll('кВт', 'kW').replaceAll('м³', 'm³') : project.capacity;
+---
+
+<article class:list={['object-card', { 'has-image': project.image }] } data-kind={project.kind}>
+  {project.image ? (
+    <img src={project.image} alt={`${project.client}, ${project.location}`} width="1200" height="480" loading="lazy" />
+  ) : (
+    <div class="object-blueprint" aria-hidden="true"><span>{displayCapacity}</span></div>
+  )}
+  <div class="object-card-body">
+    <p class="object-type">{kindLabels[locale][project.kind]} · {project.year}</p>
+    <h3>{project.client}</h3>
+    <p class="object-location">{project.location}</p>
+    <dl>
+      <div><dt>{copy.objects.power}</dt><dd>{displayCapacity}</dd></div>
+      <div><dt>{copy.objects.equipment}</dt><dd>{project.equipment}</dd></div>
+    </dl>
+    {linkDetail && project.id === 'logoysk-boiler-2' && (
+      <a class="arrow-link" href={localizePath(locale, 'objects/logoysk-boiler-2')}>{copy.common.more}<span aria-hidden="true">→</span></a>
+    )}
+  </div>
+</article>

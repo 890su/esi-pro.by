@@ -1,0 +1,32 @@
+---
+import { localizePath, messages, type Locale } from '../data/i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div>
+      <a class="footer-brand" href={localizePath(locale)}><b>ESI</b><span>pro</span></a>
+      <p>{copy.footer.text}</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href={localizePath(locale, 'catalog')}>{copy.nav.catalog}</a>
+      <a href={localizePath(locale, 'objects')}>{copy.nav.objects}</a>
+      <a href={localizePath(locale, 'reviews')}>{copy.nav.reviews}</a>
+      <a href={localizePath(locale, 'documents')}>{copy.common.download}</a>
+      <a href={localizePath(locale, 'privacy')}>{copy.contacts.privacy}</a>
+    </nav>
+    <div class="footer-contacts">
+      <a href="tel:+375296507779">+375 (29) 650-77-79</a>
+      <a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a>
+      <address>220112, Минск<br />ул. Прушинских, 70/74</address>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© {new Date().getFullYear()} ESIpro</span>
+    <span>{copy.footer.legal}</span>
+  </div>
+</footer>

@@ -1,0 +1,112 @@
+---
+import ContactBand from '../ContactBand.astro';
+import EquipmentCard from '../EquipmentCard.astro';
+import ObjectCard from '../ObjectCard.astro';
+import { equipment, localized, projects, reviews } from '../../data/content';
+import { localizePath, messages, type Locale } from '../../data/i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
+const stats = [
+  ['100+', { ru: 'заказчиков', by: 'заказчыкаў', en: 'customers' }[locale]],
+  ['76', { ru: 'котельных комплексов', by: 'кацельных комплексаў', en: 'boiler systems' }[locale]],
+  ['49', { ru: 'систем топливоподачи', by: 'сістэм палівападачы', en: 'fuel handling systems' }[locale]],
+  ['52', { ru: 'сушильные камеры', by: 'сушыльныя камеры', en: 'drying chambers' }[locale]],
+];
+---
+
+<section class="home-hero">
+  <div class="container home-hero-grid">
+    <div class="home-hero-copy">
+      <p class="section-kicker">{copy.home.kicker}</p>
+      <h1>{copy.home.title}</h1>
+      <p class="hero-lead">{copy.home.lead}</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href={localizePath(locale, 'contacts')}>{copy.common.request}<span aria-hidden="true">→</span></a>
+        <a class="arrow-link" href={localizePath(locale, 'catalog')}>{copy.common.allCatalog}<span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <figure class="home-hero-media">
+      <div class="technical-tag"><span>HAMECH</span><b>KWH + AZSD</b></div>
+      <img src="/images/slider-1.png" alt="HAMECH boiler equipment" width="1920" height="1080" fetchpriority="high" />
+      <figcaption>{copy.common.represented}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section section-directions">
+  <div class="container section-heading split-heading">
+    <div><p class="section-kicker">{copy.nav.catalog}</p><h2>{copy.home.directionsTitle}</h2></div>
+    <p>{copy.home.directionsLead}</p>
+  </div>
+  <div class="container direction-grid">
+    <a class="direction-card" href={localizePath(locale, 'catalog/boiler-houses')}>
+      <img src="/images/zgh120eco.jpg.png" alt="" width="480" height="557" loading="lazy" />
+      <div><span>01</span><h3>{copy.home.boilerTitle}</h3><p>{copy.home.boilerText}</p><b aria-hidden="true">→</b></div>
+    </a>
+    <a class="direction-card" href={localizePath(locale, 'catalog/drying-complexes')}>
+      <img src="/images/catalog/sk-gallery.jpg" alt="" width="905" height="460" loading="lazy" />
+      <div><span>02</span><h3>{copy.home.dryingTitle}</h3><p>{copy.home.dryingText}</p><b aria-hidden="true">→</b></div>
+    </a>
+  </div>
+</section>
+
+<section class="section about-band">
+  <div class="container about-band-grid">
+    <div class="about-copy">
+      <p class="section-kicker">{copy.home.aboutKicker}</p>
+      <h2>{copy.home.aboutTitle}</h2>
+      <p>{copy.home.aboutText}</p>
+      <a class="arrow-link" href={localizePath(locale, 'about')}>{copy.nav.about}<span aria-hidden="true">→</span></a>
+    </div>
+    <div class="stats-grid">
+      {stats.map(([value, label]) => <div class="stat"><strong>{value}</strong><span>{label}</span></div>)}
+      <p class="stats-note">{copy.about.sourceNote}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container section-heading split-heading">
+    <div><p class="section-kicker">{copy.nav.catalog}</p><h2>{copy.home.catalogTitle}</h2></div>
+    <div><p>{copy.home.catalogLead}</p><a class="arrow-link" href={localizePath(locale, 'catalog')}>{copy.common.allCatalog}<span aria-hidden="true">→</span></a></div>
+  </div>
+  <div class="container equipment-grid">
+    {equipment.slice(0, 4).map((item) => <EquipmentCard item={item} locale={locale} />)}
+  </div>
+</section>
+
+<section class="section projects-preview">
+  <div class="container section-heading split-heading light-heading">
+    <div><p class="section-kicker">{copy.nav.objects}</p><h2>{copy.home.objectsTitle}</h2></div>
+    <div><p>{copy.home.objectsLead}</p><a class="arrow-link" href={localizePath(locale, 'objects')}>{copy.common.allObjects}<span aria-hidden="true">→</span></a></div>
+  </div>
+  <div class="container object-grid object-grid-preview">
+    {featuredProjects.map((project) => <ObjectCard project={project} locale={locale} linkDetail />)}
+  </div>
+</section>
+
+<section class="section reviews-preview">
+  <div class="container section-heading split-heading">
+    <div><p class="section-kicker">{copy.nav.reviews}</p><h2>{copy.home.reviewsTitle}</h2></div>
+    <div><p>{copy.home.reviewsLead}</p><a class="arrow-link" href={localizePath(locale, 'reviews')}>{copy.common.allReviews}<span aria-hidden="true">→</span></a></div>
+  </div>
+  <div class="container review-strip">
+    {reviews.map((review) => (
+      <a href={localizePath(locale, 'reviews')} class="review-teaser">
+        <span>{review.year}</span><h3>{review.organization}</h3><p>{localized(review.summary, locale)}</p><b aria-hidden="true">↗</b>
+      </a>
+    ))}
+  </div>
+</section>
+
+<section class="section process-section">
+  <div class="container"><p class="section-kicker">{copy.nav.services}</p><h2>{copy.home.processTitle}</h2></div>
+  <ol class="container process-list">
+    {copy.home.steps.map((step, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><strong>{step}</strong></li>)}
+  </ol>
+</section>
+
+<ContactBand locale={locale} />

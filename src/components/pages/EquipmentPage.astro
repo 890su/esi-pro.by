@@ -1,0 +1,80 @@
+---
+import ContactBand from '../ContactBand.astro';
+import EquipmentGallery from '../EquipmentGallery.astro';
+import ObjectCard from '../ObjectCard.astro';
+import PageHero from '../PageHero.astro';
+import { formatTechnicalValue, localized, projects, type EquipmentItem } from '../../data/content';
+import { localizePath, messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale; item: EquipmentItem }
+const { locale, item } = Astro.props;
+const copy = messages[locale];
+const related = projects.filter((project) => project.equipment.includes(item.model.split(' ')[0])).slice(0, 3);
+const displayRange = formatTechnicalValue(item.range, locale);
+const specValue = (value: string | Record<Locale, string>) => formatTechnicalValue(value, locale);
+const displayCell = (value: string) => formatTechnicalValue(value, locale);
+const ui = {
+  ru: { overview: 'Технический обзор', features: 'Ключевые особенности', gallery: 'Оборудование в деталях', galleryLead: 'Фотографии, конструктивные схемы и узлы из технического каталога HAMECH.', models: 'Модельный ряд', source: 'Параметры приведены по каталогу. Итоговая комплектация и габариты подтверждаются при проектировании.', modelAria: 'Таблица моделей оборудования' },
+  by: { overview: 'Тэхнічны агляд', features: 'Ключавыя асаблівасці', gallery: 'Абсталяванне ў дэталях', galleryLead: 'Фатаграфіі, канструктыўныя схемы і вузлы з тэхнічнага каталога HAMECH.', models: 'Мадэльны шэраг', source: 'Параметры прыведзены паводле каталога. Выніковая камплектацыя і габарыты пацвярджаюцца пры праектаванні.', modelAria: 'Табліца мадэляў абсталявання' },
+  en: { overview: 'Technical overview', features: 'Key features', gallery: 'Equipment in detail', galleryLead: 'Product photography, construction diagrams and components from the HAMECH technical catalogue.', models: 'Model range', source: 'Parameters are based on the catalogue. Final configuration and dimensions are confirmed during engineering.', modelAria: 'Equipment model table' },
+}[locale];
+---
+
+<PageHero locale={locale} title={localized(item.title, locale)} intro={localized(item.summary, locale)} parent={{ label: copy.nav.catalog, path: 'catalog' }} />
+<section class="section equipment-detail">
+  <div class="container equipment-detail-grid">
+    <div class="equipment-detail-media">
+      <img src={item.image} alt={localized(item.imageAlt, locale)} width="1090" height="790" fetchpriority="high" />
+      <span>{item.model}</span>
+    </div>
+    <div class="equipment-detail-copy">
+      <p class="section-kicker">{displayRange}</p>
+      <h2>{item.model}</h2>
+      <p class="lead-paragraph">{localized(item.applications, locale)}</p>
+      <dl class="spec-list">
+        {item.specs.map((spec) => <div><dt>{localized(spec.label, locale)}</dt><dd>{specValue(spec.value)}</dd></div>)}
+      </dl>
+      <a class="button button-primary" href={`${localizePath(locale, 'contacts')}?interest=${item.category}`}>{copy.common.request}<span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+<section class="section section-soft equipment-overview">
+  <div class="container technical-overview-grid">
+    <div>
+      <p class="section-kicker">{ui.overview}</p>
+      <h2>{localized(item.title, locale)}</h2>
+      <p class="lead-paragraph">{localized(item.details, locale)}</p>
+    </div>
+    <div class="feature-panel">
+      <p class="section-kicker">{ui.features}</p>
+      <ul class="feature-list">{item.features.map((feature) => <li>{localized(feature, locale)}</li>)}</ul>
+    </div>
+  </div>
+</section>
+<section class="section equipment-gallery-section">
+  <div class="container section-heading split-heading">
+    <div><p class="section-kicker">HAMECH / {item.model}</p><h2>{ui.gallery}</h2></div>
+    <p>{ui.galleryLead}</p>
+  </div>
+  <div class="container"><EquipmentGallery locale={locale} visuals={item.gallery} /></div>
+</section>
+<section class="section section-soft model-range-section">
+  <div class="container section-heading split-heading">
+    <div><p class="section-kicker">{ui.models}</p><h2>{localized(item.modelTable.title, locale)}</h2></div>
+    <p>{item.modelTable.note ? localized(item.modelTable.note, locale) : ui.source}</p>
+  </div>
+  <div class="container table-scroll" tabindex="0" aria-label={ui.modelAria}>
+    <table class="technical-table">
+      <thead><tr>{item.modelTable.columns.map((column) => <th scope="col">{localized(column, locale)}</th>)}</tr></thead>
+      <tbody>{item.modelTable.rows.map((row) => <tr>{row.map((cell, index) => index === 0 ? <th scope="row">{displayCell(cell)}</th> : <td>{displayCell(cell)}</td>)}</tr>)}</tbody>
+    </table>
+  </div>
+  <p class="container technical-source-note">{ui.source}</p>
+</section>
+{related.length > 0 && (
+  <section class="section related-projects">
+    <div class="container section-heading"><p class="section-kicker">{copy.nav.objects}</p><h2>{copy.home.objectsTitle}</h2></div>
+    <div class="container object-grid">{related.map((project) => <ObjectCard project={project} locale={locale} linkDetail />)}</div>
+  </section>
+)}
+<section class="section document-link-section"><div class="container document-link"><div><p class="section-kicker">PDF</p><h2>{copy.documents.title}</h2></div><a class="button button-outline" href="/catalog.pdf" target="_blank">{copy.common.download}<span aria-hidden="true">↗</span></a></div></section>
+<ContactBand locale={locale} />

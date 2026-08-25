@@ -1,0 +1,37 @@
+---
+import ContactBand from '../ContactBand.astro';
+import PageHero from '../PageHero.astro';
+import { reviews } from '../../data/content';
+import { localized } from '../../data/content';
+import { localizePath, messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+const review = reviews[0];
+const paragraphs = {
+  ru: ['Новая котельная №2 в г. п. Плещеницы построена для работы на местных видах топлива — древесной щепе и опилках.', 'В составе объекта указаны два котла KWH-2000 и четыре системы сжигания AZSD-1000. Комплекс введён в эксплуатацию в 2009 году.'],
+  by: ['Новая кацельня №2 у г. п. Плешчаніцы пабудавана для працы на мясцовых відах паліва — драўнянай шчэпе і пілавінні.', 'У складзе аб’екта пазначаны два катлы KWH-2000 і чатыры сістэмы спальвання AZSD-1000. Комплекс уведзены ў эксплуатацыю ў 2009 годзе.'],
+  en: ['The new boiler plant No. 2 in Pleshchenitsy was built for local woody fuels: chips and sawdust.', 'The documented equipment package includes two KWH-2000 boilers and four AZSD-1000 combustion systems. The plant was commissioned in 2009.'],
+};
+---
+
+<PageHero locale={locale} title={copy.objects.detailTitle} intro={copy.objects.detailDescription} parent={{ label: copy.nav.objects, path: 'objects' }} />
+<article class="section object-detail">
+  <div class="container object-detail-hero"><img src="/images/kotelnaja-pleschenitsy.jpg" alt={copy.objects.detailTitle} width="1200" height="480" fetchpriority="high" /></div>
+  <div class="container editorial-grid object-detail-content">
+    <dl class="project-facts">
+      <div><dt>{copy.objects.power}</dt><dd>4 000 кВт</dd></div>
+      <div><dt>{copy.objects.equipment}</dt><dd>KWH-2000×2<br />AZSD-1000×4</dd></div>
+      <div><dt>{copy.objects.year}</dt><dd>2007–2009</dd></div>
+      <div><dt>Location</dt><dd>Плещеницы</dd></div>
+    </dl>
+    <div class="prose">{paragraphs[locale].map((paragraph) => <p>{paragraph}</p>)}</div>
+  </div>
+</article>
+<section class="section section-soft">
+  <div class="container review-feature">
+    <div><p class="section-kicker">{copy.nav.reviews} · {review.year}</p><h2>{review.organization}</h2><p>{localized(review.summary, locale)}</p><a class="arrow-link" href={localizePath(locale, 'reviews')}>{copy.common.allReviews}<span aria-hidden="true">→</span></a></div>
+    <a href={review.image} target="_blank"><img src={review.image} alt={review.organization} width="900" height="1200" loading="lazy" /></a>
+  </div>
+</section>
+<ContactBand locale={locale} />

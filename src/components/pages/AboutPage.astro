@@ -1,0 +1,26 @@
+---
+import ContactBand from '../ContactBand.astro';
+import PageHero from '../PageHero.astro';
+import { messages, type Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = messages[locale];
+---
+
+<PageHero locale={locale} title={copy.about.title} intro={copy.about.intro} />
+<section class="section">
+  <div class="container editorial-grid">
+    <div><p class="section-kicker">ESIpro × HAMECH</p><h2>{copy.about.heading}</h2></div>
+    <div class="prose"><p class="lead-paragraph">{copy.about.body}</p><p>{copy.about.sourceNote}</p></div>
+  </div>
+  <div class="container value-grid">
+    {copy.about.values.map((value, index) => <article><span>{String(index + 1).padStart(2, '0')}</span><h3>{value}</h3></article>)}
+  </div>
+</section>
+<section class="section factory-section">
+  <div class="container factory-grid">
+    <img src="/images/logo-hamech.png" alt="HAMECH" width="300" height="211" loading="lazy" />
+    <div><p class="section-kicker">Hajnówka · Polska</p><h2>HAMECH</h2><p>{copy.home.aboutText}</p><a class="arrow-link" href="https://hamech.pl/" rel="external">hamech.pl <span aria-hidden="true">↗</span></a></div>
+  </div>
+</section>
+<ContactBand locale={locale} />
