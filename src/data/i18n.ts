@@ -150,6 +150,16 @@ const ru = {
     description: 'Порядок обработки данных, переданных через форму ESIpro.',
     body: 'Данные из формы используются только для ответа на обращение и подготовки предложения. Они не публикуются и не передаются третьим лицам, кроме сервисов доставки сообщения, настроенных владельцем сайта.',
   },
+  company: {
+    kicker: 'Юридическая информация',
+    title: 'Реквизиты предприятия',
+    taxId: 'УНП',
+    registeredAddress: 'Юридический адрес',
+    settlementAccount: 'Расчётный счёт',
+    postalAddress: 'Почтовый адрес',
+    director: 'Директор',
+    inBank: 'в',
+  },
   footer: {
     text: 'Оборудование котельных и сушильных комплексов. Представительство HAMECH в Беларуси.',
     legal: 'Все технические параметры уточняются при проектировании.',
@@ -195,6 +205,7 @@ const by: typeof ru = {
   documents: { title: 'Дакументы', description: 'Каталог, тэхнічныя матэрыялы і гістарычныя дэкларацыі на абсталяванне HAMECH.', intro: 'Дакументы аддзелены ад водгукаў. Для дэкларацый пазначана, што апублікаваныя копіі маюць гістарычны тэрмін дзеяння.', historical: 'Архіўны дакумент — тэрмін дзеяння копіі завершаны' },
   contacts: { title: 'Кантакты', description: 'Звязацца з ESIpro для падбору кацельні або сушыльнага комплексу HAMECH.', intro: 'Апішыце задачу і зыходныя даныя. Мы ўдакладнім параметры і прапануем наступны інжынерны крок.', formTitle: 'Запытаць кансультацыю', name: 'Ваша імя', phone: 'Тэлефон', email: 'Email', direction: 'Напрамак', directionPlaceholder: 'Выберыце напрамак', boiler: 'Кацельня', drying: 'Сушыльны комплекс', other: 'Іншая задача', message: 'Коратка пра задачу', consent: 'Згодны на апрацоўку даных для адказу на зварот', submit: 'Адправіць запыт', sending: 'Адпраўляем…', privacy: 'Палітыка апрацоўкі даных' },
   privacy: { title: 'Апрацоўка персанальных даных', description: 'Парадак апрацоўкі даных, перададзеных праз форму ESIpro.', body: 'Даныя з формы выкарыстоўваюцца толькі для адказу на зварот і падрыхтоўкі прапановы. Яны не публікуюцца і не перадаюцца трэцім асобам, акрамя сэрвісаў дастаўкі паведамлення, наладжаных уладальнікам сайта.' },
+  company: { kicker: 'Юрыдычная інфармацыя', title: 'Рэквізіты прадпрыемства', taxId: 'УНП', registeredAddress: 'Юрыдычны адрас', settlementAccount: 'Разліковы рахунак', postalAddress: 'Паштовы адрас', director: 'Дырэктар', inBank: 'у' },
   footer: { text: 'Абсталяванне кацельняў і сушыльных комплексаў. Прадстаўніцтва HAMECH у Беларусі.', legal: 'Усе тэхнічныя параметры ўдакладняюцца пры праектаванні.' },
 };
 
@@ -237,6 +248,7 @@ const en: typeof ru = {
   documents: { title: 'Documents', description: 'Catalogue, technical materials and historical declarations for HAMECH equipment.', intro: 'Documents are separated from customer references. Historical declarations are clearly marked with the validity of the available copy.', historical: 'Archive document — the available copy has expired' },
   contacts: { title: 'Contact', description: 'Contact ESIpro to select a HAMECH boiler plant or timber drying system.', intro: 'Describe the requirement and available input data. We will clarify the parameters and suggest the next engineering step.', formTitle: 'Request a consultation', name: 'Your name', phone: 'Phone', email: 'Email', direction: 'Area of interest', directionPlaceholder: 'Select an area', boiler: 'Boiler plant', drying: 'Timber drying system', other: 'Other requirement', message: 'Briefly describe the task', consent: 'I agree to the processing of my data for a response to this enquiry', submit: 'Send request', sending: 'Sending…', privacy: 'Data processing policy' },
   privacy: { title: 'Personal data processing', description: 'How data submitted through the ESIpro form is processed.', body: 'Form data is used only to respond to the enquiry and prepare a proposal. It is not published or shared with third parties except for the message delivery services configured by the website owner.' },
+  company: { kicker: 'Legal information', title: 'Company details', taxId: 'Taxpayer ID (UNP)', registeredAddress: 'Registered address', settlementAccount: 'Settlement account', postalAddress: 'Postal address', director: 'Director', inBank: 'at' },
   footer: { text: 'Boiler and timber drying equipment. HAMECH representative in Belarus.', legal: 'All technical parameters are verified during engineering.' },
 };
 

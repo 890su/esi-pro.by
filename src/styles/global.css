@@ -69,10 +69,9 @@ h3 { font-size: clamp(23px, 2.2vw, 29px); line-height: 1.18; letter-spacing: -.0
 .site-header { position: sticky; z-index: 100; top: 0; background: rgba(255, 255, 255, .97); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
 .header-shell { min-height: 100px; display: flex; align-items: center; gap: 38px; }
 .brand-lockup { display: inline-flex; align-items: center; gap: 16px; flex: 0 0 auto; }
-.esi-wordmark, .footer-brand { color: var(--navy); font-family: var(--display); font-size: 29px; font-weight: 700; letter-spacing: -.055em; line-height: 1; }
-.esi-wordmark b, .footer-brand b { color: var(--heat); }
+.esi-header-logo { width: 118px; height: auto; }
 .brand-divider { width: 1px; height: 48px; background: var(--line); }
-.brand-lockup img { width: 67px; height: auto; }
+.hamech-header-logo { width: 67px; height: auto; }
 .navigation-panel { min-width: 0; margin-left: auto; display: flex; align-items: center; gap: 26px; }
 .primary-navigation { display: flex; align-items: center; gap: clamp(16px, 1.7vw, 27px); }
 .primary-navigation a { position: relative; padding-block: 38px; color: var(--navy); font-size: 15px; font-weight: 700; white-space: nowrap; }
@@ -151,12 +150,14 @@ h3 { font-size: clamp(23px, 2.2vw, 29px); line-height: 1.18; letter-spacing: -.0
 
 .site-footer { background: var(--navy-deep); color: var(--white); }
 .footer-main { display: grid; grid-template-columns: 1.15fr .8fr .85fr; gap: 70px; padding-block: 64px; }
-.footer-brand { display: inline-block; margin-bottom: 18px; color: var(--white); }
+.footer-brand { width: 132px; display: inline-block; margin-bottom: 18px; }
+.footer-brand img { width: 100%; }
 .footer-main p { max-width: 430px; color: #bdd0df; }
 .footer-links, .footer-contacts { display: grid; align-content: start; gap: 10px; }
 .footer-links a, .footer-contacts a { width: fit-content; }
 .footer-links a:hover, .footer-contacts a:hover { color: var(--pale-blue); text-decoration: underline; }
-.footer-contacts address { margin-top: 12px; color: #bdd0df; font-style: normal; }
+.footer-contacts address { max-width: 300px; margin-top: 12px; color: #bdd0df; font-style: normal; }
+.footer-contacts > span { color: #bdd0df; }
 .footer-bottom { min-height: 72px; display: flex; justify-content: space-between; gap: 24px; align-items: center; border-top: 1px solid rgba(255,255,255,.15); color: #9fb8ca; font-size: 13px; }
 
 @media (max-width: 1120px) {
@@ -183,9 +184,9 @@ h3 { font-size: clamp(23px, 2.2vw, 29px); line-height: 1.18; letter-spacing: -.0
   .header-shell { min-height: 78px; }
   .navigation-panel { inset: 78px 0 auto; min-height: calc(100dvh - 78px); max-height: calc(100dvh - 78px); }
   .brand-lockup { gap: 11px; }
-  .esi-wordmark { font-size: 25px; }
+  .esi-header-logo { width: 98px; }
   .brand-divider { height: 38px; }
-  .brand-lockup img { width: 54px; }
+  .hamech-header-logo { width: 54px; }
   .equipment-card-media { height: 230px; }
   .footer-main { gap: 34px; padding-block: 50px; }
   .footer-bottom { padding-block: 20px; align-items: flex-start; flex-direction: column; }

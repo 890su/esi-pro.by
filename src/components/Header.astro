@@ -1,5 +1,6 @@
 ---
 import { locales, localeMeta, localizePath, messages, type Locale } from '../data/i18n';
+import { company } from '../data/company';
 
 interface Props {
   locale: Locale;
@@ -22,9 +23,9 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
 <header class="site-header" data-site-header>
   <div class="header-shell container">
     <a class="brand-lockup" href={localizePath(locale)} aria-label="ESIpro — home">
-      <span class="esi-wordmark"><b>ESI</b><span>pro</span></span>
+      <img class="esi-header-logo" src="/images/brand/esilogo_blk.png" width="1050" height="300" alt="ESIpro" />
       <span class="brand-divider" aria-hidden="true"></span>
-      <img src="/images/logo-hamech.png" width="107" height="75" alt="HAMECH" />
+      <img class="hamech-header-logo" src="/images/logo-hamech.png" width="107" height="75" alt="HAMECH" />
     </a>
 
     <button
@@ -63,7 +64,7 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
           </a>
         ))}
       </div>
-      <a class="header-contact" href="tel:+375296507779">+375 29 650-77-79</a>
+      <a class="header-contact" href={`tel:${company.phone}`}>{company.phoneDisplay}</a>
     </div>
   </div>
 </header>

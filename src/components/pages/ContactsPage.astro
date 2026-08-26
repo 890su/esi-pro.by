@@ -2,6 +2,7 @@
 import ContactForm from '../ContactForm.astro';
 import PageHero from '../PageHero.astro';
 import { messages, type Locale } from '../../data/i18n';
+import { company } from '../../data/company';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const copy = messages[locale];
@@ -14,11 +15,28 @@ const interest = Astro.url.searchParams.get('interest') || '';
     <div class="contact-details">
       <p class="section-kicker">ESIpro</p>
       <h2>{copy.contacts.formTitle}</h2>
-      <a class="contact-primary" href="tel:+375296507779">+375 (29) 650-77-79</a>
-      <a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a>
-      <address>220112, г. Минск<br />ул. Прушинских, 70/74</address>
+      <a class="contact-primary" href={`tel:${company.phone}`}>{company.phoneDisplay}</a>
+      <a href={`mailto:${company.email}`}>{company.email}</a>
+      <address>{company.registeredAddress}</address>
       <p>{copy.common.represented}</p>
     </div>
     <ContactForm locale={locale} source={`/${locale}/contacts/`} preset={interest} />
+  </div>
+</section>
+
+<section class="section section-soft company-details-section">
+  <div class="container company-details-grid">
+    <div>
+      <p class="section-kicker">{copy.company.kicker}</p>
+      <h2>{copy.company.title}</h2>
+      <p class="lead-paragraph">{company.legalName}</p>
+    </div>
+    <dl class="company-details">
+      <div><dt>{copy.company.taxId}</dt><dd>{company.taxId}</dd></div>
+      <div><dt>{copy.company.registeredAddress}</dt><dd>{company.registeredAddress}</dd></div>
+      <div><dt>{copy.company.settlementAccount}</dt><dd>{company.settlementAccount}<br />{copy.company.inBank} {company.bank}</dd></div>
+      <div><dt>{copy.company.postalAddress}</dt><dd>{company.postalAddress}</dd></div>
+      <div><dt>{copy.company.director}</dt><dd>{company.director}<br /><small>{company.authorityBasis}</small></dd></div>
+    </dl>
   </div>
 </section>

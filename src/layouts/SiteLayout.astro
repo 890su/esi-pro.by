@@ -8,6 +8,7 @@ import '../styles/pages.css';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { localeMeta, locales, localizePath, messages, type Locale } from '../data/i18n';
+import { company } from '../data/company';
 
 interface Props {
   locale: Locale;
@@ -39,16 +40,16 @@ const structuredData = [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': organizationId,
-    name: 'ESIpro',
-    alternateName: 'Энергостройинвест-ПРО',
+    name: company.legalName,
+    alternateName: company.brand,
     url: site.toString(),
-    telephone: '+375296507779',
-    email: 'bula.esi@gmail.com',
+    telephone: company.phone,
+    email: company.email,
+    taxID: company.taxId,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'ул. Прушинских, 70/74',
+      streetAddress: 'ул. Захарова, д. 50в, кв. 82',
       addressLocality: 'Минск',
-      postalCode: '220112',
       addressCountry: 'BY',
     },
   },

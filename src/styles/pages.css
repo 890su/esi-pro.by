@@ -173,6 +173,13 @@
 .contact-details > a { width: fit-content; display: block; margin-bottom: 8px; color: var(--blue); font-size: 18px; font-weight: 700; }
 .contact-details .contact-primary { color: var(--navy); font: 700 clamp(27px, 3vw, 38px)/1.15 var(--display); }
 .contact-details address { margin-block: 28px; color: var(--muted); font-style: normal; }
+.company-details-grid { display: grid; grid-template-columns: minmax(300px, .75fr) minmax(0, 1.25fr); gap: clamp(45px, 9vw, 130px); align-items: start; }
+.company-details-grid .lead-paragraph { max-width: 520px; }
+.company-details { margin: 0; border-top: 1px solid var(--line); }
+.company-details > div { display: grid; grid-template-columns: minmax(150px, .65fr) minmax(0, 1.35fr); gap: 26px; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.company-details dt { color: var(--muted); }
+.company-details dd { margin: 0; color: var(--navy); font-weight: 700; overflow-wrap: anywhere; }
+.company-details small { color: var(--muted); font-size: 14px; font-weight: 400; }
 .legal-prose { max-width: 840px; }
 .legal-prose li { margin-bottom: 12px; }
 .legal-prose a { color: var(--blue); text-decoration: underline; }
@@ -180,7 +187,7 @@
 @media (max-width: 960px) {
   .home-hero { background: white; }
   .home-hero::before { display: none; }
-  .home-hero-grid, .about-band-grid, .equipment-detail-grid, .technical-overview-grid, .contacts-grid { grid-template-columns: 1fr; gap: 46px; }
+  .home-hero-grid, .about-band-grid, .equipment-detail-grid, .technical-overview-grid, .contacts-grid, .company-details-grid { grid-template-columns: 1fr; gap: 46px; }
   .home-hero-copy { padding-right: 0; }
   .home-hero-media { min-height: 420px; overflow: hidden; background: var(--hero-steel); }
   .home-hero-media::before { display: block; }
@@ -229,6 +236,7 @@
   .spec-list div { grid-template-columns: 1fr; gap: 4px; }
   .document-link { align-items: stretch; flex-direction: column; }
   .object-card dl > div { grid-template-columns: 1fr; gap: 3px; }
+  .company-details > div { grid-template-columns: 1fr; gap: 4px; }
   .services-list li { grid-template-columns: 1fr; }
   .object-summary > div { min-height: 120px; }
 }

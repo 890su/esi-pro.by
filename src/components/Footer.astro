@@ -1,5 +1,6 @@
 ---
 import { localizePath, messages, type Locale } from '../data/i18n';
+import { company } from '../data/company';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -9,7 +10,9 @@ const copy = messages[locale];
 <footer class="site-footer">
   <div class="container footer-main">
     <div>
-      <a class="footer-brand" href={localizePath(locale)}><b>ESI</b><span>pro</span></a>
+      <a class="footer-brand" href={localizePath(locale)} aria-label="ESIpro — home">
+        <img src="/images/brand/logobottom.png" width="180" height="99" alt="ESIpro" />
+      </a>
       <p>{copy.footer.text}</p>
     </div>
     <nav class="footer-links" aria-label="Footer">
@@ -20,13 +23,14 @@ const copy = messages[locale];
       <a href={localizePath(locale, 'privacy')}>{copy.contacts.privacy}</a>
     </nav>
     <div class="footer-contacts">
-      <a href="tel:+375296507779">+375 (29) 650-77-79</a>
-      <a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a>
-      <address>220112, Минск<br />ул. Прушинских, 70/74</address>
+      <a href={`tel:${company.phone}`}>{company.phoneDisplay}</a>
+      <a href={`mailto:${company.email}`}>{company.email}</a>
+      <address>{company.registeredAddress}</address>
+      <span>{copy.company.taxId}: {company.taxId}</span>
     </div>
   </div>
   <div class="container footer-bottom">
-    <span>© {new Date().getFullYear()} ESIpro</span>
+    <span>© {new Date().getFullYear()} {company.legalName}</span>
     <span>{copy.footer.legal}</span>
   </div>
 </footer>
