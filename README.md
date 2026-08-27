@@ -32,7 +32,7 @@ Production-конфигурация хранится в `wrangler.jsonc`. Пос
 npm run deploy
 ```
 
-Нативная отправка формы использует закрытый Worker `esi-pro-email`: Pages Function вызывает его через Service Binding `EMAIL_SERVICE`, а Worker отправляет письмо через Cloudflare Email Sending binding `EMAIL`, ограниченный адресом `bula.esi@gmail.com`. Для резервных каналов секреты задаются в настройках Cloudflare Pages и не должны попадать в Git:
+Сейчас Pages публикуется без Service Binding: адрес `bula.esi@gmail.com` должен сначала быть подтверждён в Cloudflare Email Routing. После подтверждения закрытый Worker `esi-pro-email` можно развернуть командой `npm run deploy:email`, вернуть привязку `EMAIL_SERVICE` в `wrangler.jsonc` и повторно выполнить `npm run deploy:pages`. Worker отправляет письмо через `send_email` binding, ограниченный подтверждённым адресом. Для резервных каналов секреты задаются в настройках Cloudflare Pages и не должны попадать в Git:
 
 ```text
 TELEGRAM_BOT_TOKEN
@@ -50,7 +50,7 @@ SEO включено на уровне общего layout: уникальные
 
 ## Подключение формы
 
-Основной канал — Cloudflare Email Sending: домен `esi-pro.by` должен быть подключён в Email Service → Email Sending, а `bula.esi@gmail.com` подтверждён как destination address. Письма отправляются с `forms@esi-pro.by`; API-ключи в коде не требуются. Worker разворачивается перед Pages и не имеет публичного `workers.dev`-адреса.
+Основной бесплатный канал — Cloudflare Email Routing: домен `esi-pro.by` уже подключён, а `bula.esi@gmail.com` должен быть подтверждён как destination address. Письма отправляются с `forms@esi-pro.by`; API-ключи в коде не требуются. Worker не имеет публичного `workers.dev`-адреса.
 
 Для локального Pages preview резервных каналов скопируйте `.dev.vars.example` в `.dev.vars`. В production добавьте нужные имена как зашифрованные переменные Cloudflare Pages.
 

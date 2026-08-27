@@ -4,11 +4,7 @@
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-08-25",
   "compatibility_flags": ["nodejs_compat"],
-  "services": [
-    {
-      "binding": "EMAIL_SERVICE",
-      "service": "esi-pro-email"
-    }
-  ],
+  // EMAIL_SERVICE is added after bula.esi@gmail.com is verified in Email Routing
+  // and the esi-pro-email Worker has been deployed.
   "send_metrics": false
 }
