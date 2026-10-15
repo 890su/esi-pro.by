@@ -1,6 +1,7 @@
 ---
 import ContactBand from '../ContactBand.astro';
 import PageHero from '../PageHero.astro';
+import AnalyticsTeaser from '../AnalyticsTeaser.astro';
 import { documents, localized } from '../../data/content';
 import { messages, type Locale } from '../../data/i18n';
 interface Props { locale: Locale }
@@ -19,4 +20,5 @@ const copy = messages[locale];
     ))}
   </div>
 </section>
+<AnalyticsTeaser locale={locale} />
 <ContactBand locale={locale} />

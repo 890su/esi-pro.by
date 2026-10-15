@@ -1,0 +1,70 @@
+.analytics-preview { background: var(--surface); }
+.analytics-teaser { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: center; gap: clamp(36px, 6vw, 85px); }
+.analytics-teaser h2 { max-width: 720px; font-size: clamp(29px, 3vw, 43px); }
+.analytics-teaser h2 a:hover { color: var(--blue); }
+.analytics-teaser p:not(.section-kicker) { max-width: 660px; color: var(--muted); }
+.analytics-teaser-image { display: grid; min-height: 280px; place-items: center; padding: 24px; background: var(--white); }
+.analytics-teaser-image img { width: 100%; height: auto; }
+.analytics-article-grid { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: clamp(35px, 6vw, 85px); align-items: start; }
+.analytics-sidebar { position: sticky; top: 132px; }
+.article-toc ul { list-style: none; padding: 0; margin: 0 0 28px; border-top: 1px solid var(--line); }
+.article-toc li { border-bottom: 1px solid var(--line); }
+.article-toc li a { display: block; padding-block: 12px; color: var(--navy); font-size: 16px; line-height: 1.45; }
+.article-toc a:hover { color: var(--blue); }
+.article-body { min-width: 0; max-width: 880px; font-size: 18px; line-height: 1.75; }
+.article-body > section { margin-top: 56px; scroll-margin-top: 132px; }
+.article-body h2 { font-size: clamp(29px, 3vw, 39px); line-height: 1.2; }
+.article-body p { margin-bottom: 24px; }
+.article-scope { font-size: 20px; line-height: 1.6; color: var(--navy); }
+.article-byline, .article-file-meta { color: var(--muted); font-size: 15px; }
+.article-figure { margin: 32px 0; }
+.article-figure img { width: 100%; height: auto; }
+.article-figure figcaption { margin-top: 12px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.article-figure-chamber img { max-width: 600px; margin-inline: auto; }
+.article-diagrams { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.article-diagrams img { height: 300px; object-fit: contain; }
+.article-table-scroll { margin-block: 28px; }
+.article-table { border-collapse: collapse; width: 100%; min-width: 570px; font-size: 16px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.article-table caption { text-align: left; padding-bottom: 14px; color: var(--muted); font-size: 15px; }
+.article-table th, .article-table td { border: 1px solid var(--line); padding: 16px; text-align: left; vertical-align: top; }
+.article-table thead th { background: var(--navy); color: var(--white); }
+.article-table tbody th { width: 48%; font-weight: 400; color: var(--navy); }
+.article-table tbody tr:nth-child(even) { background: var(--surface); }
+.article-note { padding-left: 20px; border-left: 3px solid var(--blue); color: var(--muted); font-size: 16px; line-height: 1.65; }
+.article-source { padding-block: 32px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.article-source .button { line-height: 1.35; }
+.article-file-meta { margin: 14px 0 0 !important; }
+.article-related { display: grid; justify-items: start; gap: 18px; margin-top: 48px; }
+.article-related h2 { margin-bottom: 0; }
+
+/* Seven navigation entries need the collapsed menu before they get crowded. */
+@media (min-width: 1121px) and (max-width: 1280px) {
+  .header-shell { gap: 20px; }
+  .brand-lockup { gap: 12px; }
+  .esi-header-logo { width: 100px; }
+  .hamech-header-logo { width: 56px; }
+  .primary-navigation { gap: 14px; }
+  .primary-navigation a { font-size: 14px; }
+  .navigation-panel { gap: 14px; }
+  .language-switcher { padding-left: 10px; }
+}
+@media (max-width: 960px) {
+  .analytics-article-grid { grid-template-columns: 1fr; gap: 42px; }
+  .analytics-sidebar { position: static; }
+  .article-toc ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
+  .article-body { max-width: none; }
+}
+@media (max-width: 800px) {
+  .analytics-teaser { grid-template-columns: 1fr; }
+  .analytics-teaser-image { min-height: 220px; }
+  .analytics-teaser-image img { max-width: 500px; }
+  .article-body > section { scroll-margin-top: 105px; }
+}
+@media (max-width: 580px) {
+  .article-toc ul, .article-diagrams { grid-template-columns: 1fr; }
+  .article-body { font-size: 17px; }
+  .article-scope { font-size: 18px; }
+  .article-diagrams { gap: 0; }
+  .article-diagrams img { height: auto; max-height: 380px; }
+  .article-table th, .article-table td { padding: 12px; }
+}

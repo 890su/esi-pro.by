@@ -1,6 +1,7 @@
 ---
 import { locales, localeMeta, localizePath, messages, type Locale } from '../data/i18n';
 import { company } from '../data/company';
+import { analyticsCopy } from '../data/analytics';
 
 interface Props {
   locale: Locale;
@@ -15,6 +16,7 @@ const nav = [
   { key: 'services', path: 'services', label: copy.nav.services },
   { key: 'objects', path: 'objects', label: copy.nav.objects },
   { key: 'reviews', path: 'reviews', label: copy.nav.reviews },
+  { key: 'analytics', path: 'analytics', label: analyticsCopy[locale].title },
   { key: 'contacts', path: 'contacts', label: copy.nav.contacts },
 ];
 const isActive = (path: string) => currentSlug === path || currentSlug.startsWith(`${path}/`);

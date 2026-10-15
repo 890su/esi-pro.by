@@ -1,6 +1,7 @@
 ---
 import { localizePath, messages, type Locale } from '../data/i18n';
 import { company } from '../data/company';
+import { analyticsCopy } from '../data/analytics';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -19,6 +20,7 @@ const copy = messages[locale];
       <a href={localizePath(locale, 'catalog')}>{copy.nav.catalog}</a>
       <a href={localizePath(locale, 'objects')}>{copy.nav.objects}</a>
       <a href={localizePath(locale, 'reviews')}>{copy.nav.reviews}</a>
+      <a href={localizePath(locale, 'analytics')}>{analyticsCopy[locale].title}</a>
       <a href={localizePath(locale, 'documents')}>{copy.common.download}</a>
       <a href={localizePath(locale, 'privacy')}>{copy.contacts.privacy}</a>
     </nav>

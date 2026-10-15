@@ -12,6 +12,9 @@ import ObjectsPage from '../../components/pages/ObjectsPage.astro';
 import PrivacyPage from '../../components/pages/PrivacyPage.astro';
 import ReviewsPage from '../../components/pages/ReviewsPage.astro';
 import ServicesPage from '../../components/pages/ServicesPage.astro';
+import AnalyticsPage from '../../components/pages/AnalyticsPage.astro';
+import AnalyticsArticlePage from '../../components/pages/AnalyticsArticlePage.astro';
+import { analyticsAuthors, analyticsCopy, analyticsDocument, analyticsSlug } from '../../data/analytics';
 import { equipment, localized } from '../../data/content';
 import { messages, type Locale } from '../../data/i18n';
 import { staticRouteParams, type RouteDefinition } from '../../data/routes';
@@ -39,6 +42,8 @@ const metadata = (() => {
     case 'object': return { title: copy.objects.detailTitle, description: copy.objects.detailDescription, schemaType: 'WebPage' as const };
     case 'reviews': return { title: copy.reviews.title, description: copy.reviews.description, schemaType: 'CollectionPage' as const };
     case 'documents': return { title: copy.documents.title, description: copy.documents.description, schemaType: 'CollectionPage' as const };
+    case 'analytics': return { title: analyticsCopy[locale].title, description: analyticsCopy[locale].description, schemaType: 'CollectionPage' as const };
+    case 'analytics-article': return { title: analyticsCopy[locale].articleTitle, description: analyticsCopy[locale].articleDescription, schemaType: 'WebPage' as const };
     case 'contacts': return { title: copy.contacts.title, description: copy.contacts.description, schemaType: 'ContactPage' as const };
     case 'privacy': return { title: copy.privacy.title, description: copy.privacy.description, schemaType: 'WebPage' as const };
   }
@@ -63,7 +68,19 @@ const additionalSchema = equipmentItem
         provider: { '@id': 'https://esi-pro.by/#organization' },
         areaServed: { '@type': 'Country', name: 'Belarus' },
       }
-    : undefined;
+    : route.kind === 'analytics-article'
+      ? {
+          '@type': 'Article',
+          headline: analyticsCopy[locale].articleTitle,
+          description: analyticsCopy[locale].articleDescription,
+          inLanguage: locale === 'by' ? 'be' : locale,
+          author: analyticsAuthors.map((name) => ({ '@type': 'Person', name })),
+          publisher: { '@id': 'https://esi-pro.by/#organization' },
+          mainEntityOfPage: `https://esi-pro.by/${locale}/${analyticsSlug}/`,
+          image: 'https://esi-pro.by/images/analytics/sk-chamber.webp',
+          isBasedOn: { '@type': 'DigitalDocument', url: `https://esi-pro.by${analyticsDocument}`, inLanguage: 'ru' },
+        }
+      : undefined;
 ---
 
 <SiteLayout locale={locale} title={metadata.title} description={metadata.description} currentSlug={route.slug} schemaType={metadata.schemaType} additionalSchema={additionalSchema}>
@@ -77,6 +94,8 @@ const additionalSchema = equipmentItem
   {route.kind === 'object' && <ObjectDetailPage locale={locale} />}
   {route.kind === 'reviews' && <ReviewsPage locale={locale} />}
   {route.kind === 'documents' && <DocumentsPage locale={locale} />}
+  {route.kind === 'analytics' && <AnalyticsPage locale={locale} />}
+  {route.kind === 'analytics-article' && <AnalyticsArticlePage locale={locale} />}
   {route.kind === 'contacts' && <ContactsPage locale={locale} />}
   {route.kind === 'privacy' && <PrivacyPage locale={locale} />}
 </SiteLayout>

@@ -12,6 +12,8 @@ export type PageKind =
   | 'object'
   | 'reviews'
   | 'documents'
+  | 'analytics'
+  | 'analytics-article'
   | 'contacts'
   | 'privacy';
 
@@ -32,6 +34,8 @@ const fixedRoutes: RouteDefinition[] = [
   { slug: 'objects/logoysk-boiler-2', kind: 'object', id: 'logoysk-boiler-2' },
   { slug: 'reviews', kind: 'reviews' },
   { slug: 'documents', kind: 'documents' },
+  { slug: 'analytics', kind: 'analytics' },
+  { slug: 'analytics/timber-drying-complex-200m3', kind: 'analytics-article' },
   { slug: 'contacts', kind: 'contacts' },
   { slug: 'privacy', kind: 'privacy' },
 ];

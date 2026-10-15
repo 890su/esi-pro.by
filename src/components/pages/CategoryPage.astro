@@ -1,5 +1,6 @@
 ---
 import ContactBand from '../ContactBand.astro';
+import AnalyticsTeaser from '../AnalyticsTeaser.astro';
 import EquipmentCard from '../EquipmentCard.astro';
 import PageHero from '../PageHero.astro';
 import { equipmentForCategory, type EquipmentCategory } from '../../data/content';
@@ -29,4 +30,5 @@ const gasNotes = {
   <div class="container section-heading split-heading"><div><p class="section-kicker">HAMECH</p><h2>{category === 'boiler' ? ({ ru: 'Биотопливо', by: 'Біяпаліва', en: 'Biofuel' }[locale]) : 'SK / DQK'}</h2></div><p>{copy.catalog.source}</p></div>
   <div class="container equipment-grid">{categoryItems.map((item) => <EquipmentCard item={item} locale={locale} />)}</div>
 </section>
+{category === 'drying' && <AnalyticsTeaser locale={locale} />}
 <ContactBand locale={locale} />

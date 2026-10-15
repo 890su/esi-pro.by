@@ -1,0 +1,12 @@
+---
+import PageHero from '../PageHero.astro';
+import AnalyticsTeaser from '../AnalyticsTeaser.astro';
+import { analyticsCopy } from '../../data/analytics';
+import type { Locale } from '../../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = analyticsCopy[locale];
+---
+
+<PageHero locale={locale} title={copy.title} intro={copy.intro} />
+<AnalyticsTeaser locale={locale} />

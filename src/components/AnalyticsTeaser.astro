@@ -1,0 +1,21 @@
+---
+import { analyticsCopy, analyticsSlug } from '../data/analytics';
+import { localizePath, type Locale } from '../data/i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = analyticsCopy[locale];
+---
+
+<section class="section analytics-preview">
+  <div class="container analytics-teaser">
+    <div>
+      <p class="section-kicker">{copy.title} · {copy.category}</p>
+      <h2><a href={localizePath(locale, analyticsSlug)}>{copy.articleTitle}</a></h2>
+      <p>{copy.articleDescription}</p>
+      <a class="arrow-link" href={localizePath(locale, analyticsSlug)}>{copy.read}<span aria-hidden="true">→</span></a>
+    </div>
+    <a class="analytics-teaser-image" href={localizePath(locale, analyticsSlug)} aria-label={copy.articleTitle}>
+      <img src="/images/analytics/sk-chamber.webp" width="500" height="249" alt={copy.captions[1]} loading="lazy" />
+    </a>
+  </div>
+</section>
