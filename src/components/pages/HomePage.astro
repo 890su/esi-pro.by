@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from '../ResponsiveImage.astro';
 import ContactBand from '../ContactBand.astro';
 import EquipmentCard from '../EquipmentCard.astro';
 import ObjectCard from '../ObjectCard.astro';
@@ -30,7 +31,7 @@ const stats = [
     </div>
     <figure class="home-hero-media">
       <div class="technical-tag"><span>HAMECH</span><b>KWH + AZSD</b></div>
-      <img src="/images/slider-1.png" alt="HAMECH boiler equipment" width="1920" height="1080" fetchpriority="high" />
+      <ResponsiveImage src="/images/slider-1.png" alt="HAMECH boiler equipment" width="1920" height="1080" fetchpriority="high" />
       <figcaption>{copy.common.represented}</figcaption>
     </figure>
   </div>
@@ -43,11 +44,11 @@ const stats = [
   </div>
   <div class="container direction-grid">
     <a class="direction-card" href={localizePath(locale, 'catalog/boiler-houses')}>
-      <img src="/images/zgh120eco.jpg.png" alt="" width="480" height="557" loading="lazy" />
+      <ResponsiveImage src="/images/zgh120eco.jpg.png" alt="" width="480" height="557" loading="lazy" />
       <div><span>01</span><h3>{copy.home.boilerTitle}</h3><p>{copy.home.boilerText}</p><b aria-hidden="true">→</b></div>
     </a>
     <a class="direction-card" href={localizePath(locale, 'catalog/drying-complexes')}>
-      <img src="/images/catalog/sk-gallery.jpg" alt="" width="905" height="460" loading="lazy" />
+      <ResponsiveImage src="/images/catalog/sk-gallery.jpg" alt="" width="905" height="460" loading="lazy" />
       <div><span>02</span><h3>{copy.home.dryingTitle}</h3><p>{copy.home.dryingText}</p><b aria-hidden="true">→</b></div>
     </a>
   </div>

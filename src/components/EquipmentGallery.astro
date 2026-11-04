@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
 import { localized, type CatalogVisual } from '../data/content';
 import type { Locale } from '../data/i18n';
 
@@ -18,8 +19,9 @@ const labels = {
 <div class="equipment-gallery">
   {visuals.map((visual, index) => (
     <figure class:list={['equipment-visual', { 'equipment-visual-primary': index === 0 }]}>
-      <a href={visual.src} target="_blank" rel="noopener" aria-label={`${labels.open}: ${localized(visual.caption, locale)}`}>
-        <img
+      <a href={visual.src} rel="noopener" aria-label={`${labels.open}: ${localized(visual.caption, locale)}`}>
+        <ResponsiveImage
+          quality={95}
           src={visual.src}
           alt={localized(visual.alt, locale)}
           width="1200"

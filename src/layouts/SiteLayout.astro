@@ -1,8 +1,4 @@
 ---
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/lato/400.css';
-import '@fontsource/lato/700.css';
 import '../styles/global.css';
 import '../styles/pages.css';
 import '../styles/analytics.css';
@@ -19,6 +15,11 @@ interface Props {
   image?: string;
   schemaType?: 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage';
   additionalSchema?: Record<string, unknown>;
+  breadcrumbParents?: { label: string; path: string }[];
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 const {
@@ -29,6 +30,11 @@ const {
   image = '/images/slider-1.png',
   schemaType = 'WebPage',
   additionalSchema,
+  breadcrumbParents = [],
+  noindex = false,
+  ogType = 'website',
+  imageWidth = 1920,
+  imageHeight = 1080,
 } = Astro.props;
 const copy = messages[locale];
 const site = Astro.site ?? new URL(import.meta.env.PUBLIC_SITE_URL || 'https://esi-pro.by');
@@ -64,7 +70,14 @@ const structuredData = [
     inLanguage: localeMeta[locale].htmlLang,
     about: { '@id': organizationId },
   },
-  {
+  ...(!currentSlug ? [{
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': new URL('/#website', site).toString(),
+    name: company.brand,
+    url: site.toString(),
+  }] : []),
+  ...(currentSlug && !noindex ? [{
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -74,16 +87,20 @@ const structuredData = [
         name: copy.common.home,
         item: new URL(localizePath(locale, ''), site).toString(),
       },
-      ...(currentSlug
-        ? [{
+      ...breadcrumbParents.map((parent, index) => ({
+        '@type': 'ListItem',
+        position: index + 2,
+        name: parent.label,
+        item: new URL(localizePath(locale, parent.path), site).toString(),
+      })),
+      ...[{
             '@type': 'ListItem',
-            position: 2,
+            position: breadcrumbParents.length + 2,
             name: title,
             item: canonicalUrl.toString(),
-          }]
-        : []),
+          }],
     ],
-  },
+  }] : []),
   ...(additionalSchema ? [{ '@context': 'https://schema.org', ...additionalSchema }] : []),
 ];
 ---
@@ -95,37 +112,42 @@ const structuredData = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#002a55" />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large'} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonicalUrl} />
-    {locales.map((alternateLocale) => (
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
+    {!noindex && locales.map((alternateLocale) => (
       <link
         rel="alternate"
         hreflang={localeMeta[alternateLocale].htmlLang}
         href={new URL(localizePath(alternateLocale, currentSlug), site)}
       />
     ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(localizePath('ru', currentSlug), site)} />
-    <meta property="og:type" content="website" />
+    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(localizePath('ru', currentSlug), site)} />}
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="ESIpro" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:locale" content={localeMeta[locale].htmlLang.replace('-', '_')} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:locale" content={localeMeta[locale].ogLocale} />
+    {!noindex && locales.filter((alternateLocale) => alternateLocale !== locale).map((alternateLocale) => <meta property="og:locale:alternate" content={localeMeta[alternateLocale].ogLocale} />)}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="96x96" />
     <link rel="sitemap" href="/sitemap.xml" />
     <title>{fullTitle}</title>
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">{copy.common.more}</a>
+    <a class="skip-link" href="#main-content">{locale === 'en' ? 'Skip to main content' : locale === 'by' ? 'Перайсці да зместу' : 'Перейти к содержимому'}</a>
     <Header locale={locale} currentSlug={currentSlug} />
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
     <Footer locale={locale} />

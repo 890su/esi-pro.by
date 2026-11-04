@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
 import { locales, localeMeta, localizePath, messages, type Locale } from '../data/i18n';
 import { company } from '../data/company';
 import { analyticsCopy } from '../data/analytics';
@@ -24,10 +25,10 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
 
 <header class="site-header" data-site-header>
   <div class="header-shell container">
-    <a class="brand-lockup" href={localizePath(locale)} aria-label="ESIpro — home">
-      <img class="esi-header-logo" src="/images/brand/esilogo_blk.png" width="1050" height="300" alt="ESIpro" />
+    <a class="brand-lockup" href={localizePath(locale)} aria-label={`ESIpro — ${copy.common.home}`}>
+      <ResponsiveImage class="esi-header-logo" sizes="118px" src="/images/brand/esilogo_blk.png" width="1050" height="300" alt="ESIpro" />
       <span class="brand-divider" aria-hidden="true"></span>
-      <img class="hamech-header-logo" src="/images/logo-hamech.png" width="107" height="75" alt="HAMECH" />
+      <ResponsiveImage class="hamech-header-logo" sizes="67px" src="/images/logo-hamech.png" width="107" height="75" alt="HAMECH" />
     </a>
 
     <button
@@ -54,7 +55,7 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
           </a>
         ))}
       </nav>
-      <div class="language-switcher" aria-label={copy.nav.languages}>
+      <nav class="language-switcher" aria-label={copy.nav.languages}>
         {locales.map((item) => (
           <a
             href={localizePath(item, currentSlug)}
@@ -65,7 +66,7 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
             {localeMeta[item].label}
           </a>
         ))}
-      </div>
+      </nav>
       <a class="header-contact" href={`tel:${company.phone}`}>{company.phoneDisplay}</a>
     </div>
   </div>
@@ -76,6 +77,8 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
   const toggle = header?.querySelector('[data-menu-toggle]');
   const panel = header?.querySelector('[data-navigation-panel]');
   const label = toggle?.querySelector('.menu-toggle-label');
+  const mobile = window.matchMedia('(max-width: 1120px)');
+  const background = [...document.querySelectorAll<HTMLElement>('main, .site-footer')];
 
   const setMenu = (open: boolean) => {
     if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
@@ -86,6 +89,7 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
     toggle.setAttribute('aria-label', menuLabel || 'Menu');
     panel.classList.toggle('is-open', open);
     document.body.classList.toggle('menu-open', open);
+    background.forEach((element) => { element.inert = open; });
     if (label instanceof HTMLElement) {
       label.textContent = (open ? label.dataset.closeLabel : label.dataset.openLabel) || '';
     }
@@ -94,9 +98,18 @@ const isActive = (path: string) => currentSlug === path || currentSlug.startsWit
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
   panel?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Tab' && toggle?.getAttribute('aria-expanded') === 'true' && header) {
+      const controls = [...header.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')]
+        .filter((element) => element.getClientRects().length > 0);
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
     if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
       setMenu(false);
       if (toggle instanceof HTMLButtonElement) toggle.focus();
     }
   });
+  mobile.addEventListener('change', () => setMenu(false));
 </script>

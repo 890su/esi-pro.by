@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from '../ResponsiveImage.astro';
 import PageHero from '../PageHero.astro';
 import ContactBand from '../ContactBand.astro';
 import { analyticsAuthors, analyticsCopy, analyticsDocument, thermalScenarios } from '../../data/analytics';
@@ -38,7 +39,7 @@ const specs = [
         <h2>{copy.sections[0]}</h2>
         <p>{copy.overview}</p>
         <figure class="article-figure article-figure-chamber">
-          <img src="/images/analytics/sk-chamber.webp" width="500" height="249" alt={copy.captions[1]} loading="lazy" />
+          <ResponsiveImage src="/images/analytics/sk-chamber.webp" width="500" height="249" alt={copy.captions[1]} loading="lazy" />
           <figcaption>{copy.captions[1]}</figcaption>
         </figure>
       </section>
@@ -46,8 +47,8 @@ const specs = [
         <h2>{copy.sections[1]}</h2>
         <p>{copy.insulation}</p>
         <figure class="article-figure">
-          <a href="/images/analytics/drying-schedule.webp" target="_blank" rel="noopener">
-            <img src="/images/analytics/drying-schedule.webp" width="1107" height="745" alt={copy.captions[0]} loading="lazy" />
+          <a href="/images/analytics/drying-schedule.webp" rel="noopener">
+            <ResponsiveImage src="/images/analytics/drying-schedule.webp" width="1107" height="745" alt={copy.captions[0]} loading="lazy" />
           </a>
           <figcaption>{copy.captions[0]}</figcaption>
         </figure>
@@ -78,8 +79,8 @@ const specs = [
         <h2>{copy.sections[4]}</h2>
         <p>{copy.equipment}</p>
         <div class="article-diagrams">
-          <figure class="article-figure"><img src="/images/analytics/kwh-boiler.webp" width="400" height="386" alt={copy.captions[2]} loading="lazy" /><figcaption>{copy.captions[2]}</figcaption></figure>
-          <figure class="article-figure"><img src="/images/analytics/azsd-combustion.webp" width="798" height="676" alt={copy.captions[3]} loading="lazy" /><figcaption>{copy.captions[3]}</figcaption></figure>
+          <figure class="article-figure"><ResponsiveImage src="/images/analytics/kwh-boiler.webp" width="400" height="386" alt={copy.captions[2]} loading="lazy" /><figcaption>{copy.captions[2]}</figcaption></figure>
+          <figure class="article-figure"><ResponsiveImage src="/images/analytics/azsd-combustion.webp" width="798" height="676" alt={copy.captions[3]} loading="lazy" /><figcaption>{copy.captions[3]}</figcaption></figure>
         </div>
         <p>{copy.conclusion}</p>
       </section>

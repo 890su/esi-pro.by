@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
-    "build": "astro build",
+    "build": "astro build && node scripts/security-headers.mjs",
     "verify": "npm run check && npm run build",
     "preview": "wrangler pages dev -c wrangler.jsonc -c email-worker/wrangler.jsonc",
     "deploy:email": "wrangler deploy -c email-worker/wrangler.jsonc",

@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { EquipmentItem } from '../data/content';
 import { formatTechnicalValue, localized } from '../data/content';
 import { localizePath, messages, type Locale } from '../data/i18n';
@@ -17,7 +18,7 @@ const specValue = (value: string | Record<Locale, string>) => formatTechnicalVal
 
 <article class="equipment-card">
   <a class="equipment-card-media" href={localizePath(locale, `catalog/equipment/${item.slug}`)} tabindex="-1" aria-hidden="true">
-    <img src={item.image} alt="" width="720" height="480" loading="lazy" />
+    <ResponsiveImage src={item.image} alt="" width="720" height="480" loading="lazy" />
     <span>{item.model}</span>
     <b>{mediaLabel}</b>
   </a>

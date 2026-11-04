@@ -4,12 +4,18 @@ import { localizePath, messages, type Locale } from '../data/i18n';
 interface Props { locale: Locale; source?: string; preset?: string }
 const { locale, source = '', preset = '' } = Astro.props;
 const copy = messages[locale];
+const availability = {
+  ru: 'Онлайн-отправка временно недоступна. Напишите на bula.esi@gmail.com или позвоните +375 (29) 650-77-79.',
+  by: 'Анлайн-адпраўка часова недаступная. Напішыце на bula.esi@gmail.com або патэлефануйце +375 (29) 650-77-79.',
+  en: 'Online submission is temporarily unavailable. Email bula.esi@gmail.com or call +375 (29) 650-77-79.',
+}[locale];
 ---
 
-<form class="contact-form" data-contact-form novalidate>
+<form class="contact-form" method="post" action="/api/contact" data-contact-form>
+  <p class="form-availability">{availability} <a href="mailto:bula.esi@gmail.com">Email</a> · <a href="tel:+375296507779">+375 (29) 650-77-79</a></p>
   <input type="hidden" name="locale" value={locale} />
   <input type="hidden" name="source" value={source} />
-  <label class="hidden-field" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+  <div class="hidden-field" hidden><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
   <div class="form-grid">
     <label>{copy.contacts.name}<input name="name" autocomplete="name" required maxlength="100" /></label>
     <label>{copy.contacts.phone}<input name="phone" type="tel" autocomplete="tel" required maxlength="50" /></label>
@@ -38,12 +44,13 @@ const copy = messages[locale];
     element.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!(status instanceof HTMLElement) || !(submit instanceof HTMLButtonElement)) return;
+      if (submit.disabled) return;
       if (!element.reportValidity()) return;
       submit.disabled = true;
       status.classList.remove('is-error');
       status.textContent = status.dataset.sending || '';
       try {
-        const response = await fetch('/api/contact', { method: 'POST', body: new FormData(element) });
+        const response = await fetch(element.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(element) });
         const result = await response.json() as { message?: string };
         status.textContent = result.message || '';
         status.classList.toggle('is-error', !response.ok);

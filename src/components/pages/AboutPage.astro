@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from '../ResponsiveImage.astro';
 import ContactBand from '../ContactBand.astro';
 import PageHero from '../PageHero.astro';
 import { messages, type Locale } from '../../data/i18n';
@@ -19,7 +20,7 @@ const copy = messages[locale];
 </section>
 <section class="section factory-section">
   <div class="container factory-grid">
-    <img src="/images/logo-hamech.png" alt="HAMECH" width="300" height="211" loading="lazy" />
+    <ResponsiveImage src="/images/logo-hamech.png" alt="HAMECH" width="300" height="211" loading="lazy" />
     <div><p class="section-kicker">Hajnówka · Polska</p><h2>HAMECH</h2><p>{copy.home.aboutText}</p><a class="arrow-link" href="https://hamech.pl/" rel="external">hamech.pl <span aria-hidden="true">↗</span></a></div>
   </div>
 </section>

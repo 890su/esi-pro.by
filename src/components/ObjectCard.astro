@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
 import type { ProjectObject } from '../data/content';
 import { localizePath, messages, type Locale } from '../data/i18n';
 
@@ -15,7 +16,7 @@ const displayCapacity = locale === 'en' ? project.capacity.replaceAll('кВт', 
 
 <article class:list={['object-card', { 'has-image': project.image }] } data-kind={project.kind}>
   {project.image ? (
-    <img src={project.image} alt={`${project.client}, ${project.location}`} width="1200" height="480" loading="lazy" />
+    <ResponsiveImage src={project.image} alt={`${project.client}, ${project.location}`} width="1200" height="480" loading="lazy" />
   ) : (
     <div class="object-blueprint" aria-hidden="true"><span>{displayCapacity}</span></div>
   )}

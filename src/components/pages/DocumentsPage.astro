@@ -15,7 +15,7 @@ const copy = messages[locale];
     {documents.map((document) => (
       <article class="document-row">
         <div><p class="card-meta">{document.date}</p><h2>{localized(document.title, locale)}</h2>{document.type === 'historical' && <p class="document-warning">{copy.documents.historical}</p>}</div>
-        <a class="button button-outline" href={document.file} target="_blank">{copy.common.download}<span aria-hidden="true">↗</span></a>
+        <a class="button button-outline" href={document.file}>{copy.common.download}<span aria-hidden="true">↗</span></a>
       </article>
     ))}
   </div>

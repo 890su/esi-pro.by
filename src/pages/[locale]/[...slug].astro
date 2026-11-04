@@ -43,7 +43,7 @@ const metadata = (() => {
     case 'reviews': return { title: copy.reviews.title, description: copy.reviews.description, schemaType: 'CollectionPage' as const };
     case 'documents': return { title: copy.documents.title, description: copy.documents.description, schemaType: 'CollectionPage' as const };
     case 'analytics': return { title: analyticsCopy[locale].title, description: analyticsCopy[locale].description, schemaType: 'CollectionPage' as const };
-    case 'analytics-article': return { title: analyticsCopy[locale].articleTitle, description: analyticsCopy[locale].articleDescription, schemaType: 'WebPage' as const };
+    case 'analytics-article': return { title: locale === 'en' ? '200 m³ timber drying complex: equipment selection' : analyticsCopy[locale].articleTitle, description: analyticsCopy[locale].articleDescription, schemaType: 'WebPage' as const };
     case 'contacts': return { title: copy.contacts.title, description: copy.contacts.description, schemaType: 'ContactPage' as const };
     case 'privacy': return { title: copy.privacy.title, description: copy.privacy.description, schemaType: 'WebPage' as const };
   }
@@ -58,7 +58,7 @@ const additionalSchema = equipmentItem
       brand: { '@type': 'Brand', name: 'HAMECH' },
       manufacturer: { '@type': 'Organization', name: 'HAMECH' },
       category: equipmentItem.category === 'boiler' ? copy.categories.boiler.title : copy.categories.drying.title,
-      image: equipmentItem.image,
+      image: new URL(equipmentItem.image, Astro.site).toString(),
     }
   : route.kind === 'services'
     ? {
@@ -81,9 +81,17 @@ const additionalSchema = equipmentItem
           isBasedOn: { '@type': 'DigitalDocument', url: `https://esi-pro.by${analyticsDocument}`, inLanguage: 'ru' },
         }
       : undefined;
+const breadcrumbParents = route.kind === 'equipment' || route.kind === 'category'
+  ? [{ label: copy.nav.catalog, path: 'catalog' }]
+  : route.kind === 'object'
+    ? [{ label: copy.nav.objects, path: 'objects' }]
+    : route.kind === 'analytics-article'
+      ? [{ label: analyticsCopy[locale].title, path: 'analytics' }]
+      : [];
+const articleImage = route.kind === 'analytics-article';
 ---
 
-<SiteLayout locale={locale} title={metadata.title} description={metadata.description} currentSlug={route.slug} schemaType={metadata.schemaType} additionalSchema={additionalSchema}>
+<SiteLayout locale={locale} title={metadata.title} description={metadata.description} currentSlug={route.slug} schemaType={metadata.schemaType} additionalSchema={additionalSchema} breadcrumbParents={breadcrumbParents} image={articleImage ? '/images/analytics/sk-chamber.webp' : undefined} imageWidth={articleImage ? 500 : 1920} imageHeight={articleImage ? 249 : 1080} ogType={articleImage ? 'article' : 'website'}>
   {route.kind === 'home' && <HomePage locale={locale} />}
   {route.kind === 'about' && <AboutPage locale={locale} />}
   {route.kind === 'catalog' && <CatalogPage locale={locale} />}

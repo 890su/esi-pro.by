@@ -3,10 +3,10 @@ export const locales = ['ru', 'by', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export type LocalizedText = Record<Locale, string>;
 
-export const localeMeta: Record<Locale, { label: string; htmlLang: string; name: string }> = {
-  ru: { label: 'RU', htmlLang: 'ru-BY', name: 'Русский' },
-  by: { label: 'BY', htmlLang: 'be-BY', name: 'Беларуская' },
-  en: { label: 'EN', htmlLang: 'en', name: 'English' },
+export const localeMeta: Record<Locale, { label: string; htmlLang: string; ogLocale: string; name: string }> = {
+  ru: { label: 'RU', htmlLang: 'ru-BY', ogLocale: 'ru_BY', name: 'Русский' },
+  by: { label: 'BY', htmlLang: 'be-BY', ogLocale: 'be_BY', name: 'Беларуская' },
+  en: { label: 'EN', htmlLang: 'en', ogLocale: 'en_GB', name: 'English' },
 };
 const ru = {
   nav: {
@@ -214,7 +214,7 @@ const en: typeof ru = {
   nav: { about: 'About', catalog: 'Catalogue', services: 'Services', objects: 'Projects', reviews: 'References', contacts: 'Contact', menuOpen: 'Open menu', menuClose: 'Close menu', languages: 'Languages' },
   common: { home: 'Home', more: 'Learn more', allCatalog: 'Full catalogue', allObjects: 'All projects', allReviews: 'All references', request: 'Request a quotation', discuss: 'Discuss a project', download: 'Download', sourceDate: 'Data as of 1 February 2020', represented: 'HAMECH representative in Belarus', noPhoto: 'Verified project data' },
   home: {
-    seoTitle: 'ESIpro — HAMECH boiler plants and timber drying systems in Belarus',
+    seoTitle: 'ESIpro — HAMECH boilers and timber drying systems in Belarus',
     seoDescription: 'Automated biofuel and natural-gas boiler plants and timber drying systems. HAMECH equipment in Belarus.',
     kicker: 'Engineering solutions for industry',
     title: 'Boiler plants and drying systems for your production',

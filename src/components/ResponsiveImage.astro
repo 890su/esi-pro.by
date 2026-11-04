@@ -1,0 +1,21 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'img'>, 'src' | 'width' | 'height'> {
+  src: string;
+  alt: string;
+  width?: string | number;
+  height?: string | number;
+  sizes?: string;
+  quality?: number;
+}
+
+const originals = import.meta.glob<{ default: ImageMetadata }>('../assets/site/**/*.{png,jpg,jpeg,webp}', { eager: true });
+const { src, alt, width, height, quality = 85, sizes = '(max-width: 800px) calc(100vw - 36px), (max-width: 1304px) 45vw, 600px', ...attributes } = Astro.props;
+const image = originals[src.replace('/images/', '../assets/site/')]?.default;
+if (!image) throw new Error(`Missing responsive image source: ${src}`);
+const widths = [...new Set([128, 256, 320, 640, 768, 1024, 1280, Math.min(1920, image.width)].filter((value) => value <= image.width))].sort((a, b) => a - b);
+---
+<Picture src={image} alt={alt} widths={widths} sizes={sizes} formats={['avif', 'webp']} fallbackFormat={image.format === 'png' ? 'png' : 'jpg'} quality={quality} decoding="async" {...attributes} loading={attributes.loading ?? 'eager'} />

@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://esi-pro.by',
   output: 'static',
+  build: { inlineStylesheets: 'always' },
   i18n: {
     defaultLocale: 'ru',
     locales: [

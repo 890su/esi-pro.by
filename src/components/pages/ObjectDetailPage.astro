@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from '../ResponsiveImage.astro';
 import ContactBand from '../ContactBand.astro';
 import PageHero from '../PageHero.astro';
 import { reviews } from '../../data/content';
@@ -17,7 +18,7 @@ const paragraphs = {
 
 <PageHero locale={locale} title={copy.objects.detailTitle} intro={copy.objects.detailDescription} parent={{ label: copy.nav.objects, path: 'objects' }} />
 <article class="section object-detail">
-  <div class="container object-detail-hero"><img src="/images/kotelnaja-pleschenitsy.jpg" alt={copy.objects.detailTitle} width="1200" height="480" fetchpriority="high" /></div>
+  <div class="container object-detail-hero"><ResponsiveImage src="/images/kotelnaja-pleschenitsy.jpg" alt={copy.objects.detailTitle} width="1200" height="480" fetchpriority="high" /></div>
   <div class="container editorial-grid object-detail-content">
     <dl class="project-facts">
       <div><dt>{copy.objects.power}</dt><dd>4 000 кВт</dd></div>
@@ -31,7 +32,7 @@ const paragraphs = {
 <section class="section section-soft">
   <div class="container review-feature">
     <div><p class="section-kicker">{copy.nav.reviews} · {review.year}</p><h2>{review.organization}</h2><p>{localized(review.summary, locale)}</p><a class="arrow-link" href={localizePath(locale, 'reviews')}>{copy.common.allReviews}<span aria-hidden="true">→</span></a></div>
-    <a href={review.image} target="_blank"><img src={review.image} alt={review.organization} width="900" height="1200" loading="lazy" /></a>
+    <a href={review.image}><ResponsiveImage src={review.image} alt={review.organization} width="900" height="1200" loading="lazy" /></a>
   </div>
 </section>
 <ContactBand locale={locale} />

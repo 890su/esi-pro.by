@@ -63,16 +63,26 @@ const isRateLimited = (key: string) => {
 };
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  // Native POST remains private and usable without JavaScript; never put lead fields in a URL.
+  const respond = (body: Record<string, string | boolean>, status = 200) => {
+    if (!request.headers.get('Accept')?.includes('text/html')) return json(body, status);
+    const escape = (value: string) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
+    const title = body.ok ? 'ESIpro — Request received / Запрос получен' : 'ESIpro — Request not sent / Запрос не отправлен';
+    return new Response(`<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${title}</title></head><body><main><h1>${title}</h1><p>${escape(String(body.message || ''))}</p><p><a href="mailto:bula.esi@gmail.com">bula.esi@gmail.com</a> · <a href="tel:+375296507779">+375 (29) 650-77-79</a></p><p><a href="/ru/contacts/">Контакты / Contacts</a></p></main></body></html>`, {
+      status,
+      headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Content-Security-Policy': "default-src 'none'; base-uri 'none'; frame-ancestors 'none'" },
+    });
+  };
   const origin = request.headers.get('Origin');
   if (origin && new URL(origin).host !== new URL(request.url).host) {
-    return json({ ok: false, message: responses.ru.invalid }, 403);
+    return respond({ ok: false, message: responses.ru.invalid }, 403);
   }
 
   let form: FormData;
   try {
     form = await request.formData();
   } catch {
-    return json({ ok: false, message: responses.ru.invalid }, 400);
+    return respond({ ok: false, message: responses.ru.invalid }, 400);
   }
   const locale = resolveLocale(clean(form.get('locale'), 2));
   const messageCopy = responses[locale];
@@ -85,17 +95,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const consent = clean(form.get('consent'), 10);
   const honeypot = clean(form.get('website'), 200);
 
-  if (honeypot) return json({ ok: true, message: messageCopy.success });
+  if (honeypot) return respond({ ok: true, message: messageCopy.success });
   const address = request.headers.get('CF-Connecting-IP')
     || request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
     || 'unknown';
-  if (isRateLimited(address)) return json({ ok: false, message: messageCopy.limited }, 429);
+  if (isRateLimited(address)) return respond({ ok: false, message: messageCopy.limited }, 429);
 
   const phoneDigits = phone.replace(/\D/g, '');
   const validEmail = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validDirection = ['boiler', 'drying', 'other'].includes(direction);
   if (!name || phoneDigits.length < 7 || !validEmail || !validDirection || consent !== 'yes') {
-    return json({ ok: false, message: messageCopy.invalid }, 400);
+    return respond({ ok: false, message: messageCopy.invalid }, 400);
   }
 
   const directionLabel = { boiler: 'Boiler plant', drying: 'Drying system', other: 'Other' }[direction];
@@ -136,11 +146,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }).then((response) => response.ok));
   }
 
-  if (!deliveries.length) return json({ ok: false, message: messageCopy.unavailable }, 503);
+  if (!deliveries.length) return respond({ ok: false, message: messageCopy.unavailable }, 503);
 
   const results = await Promise.allSettled(deliveries);
   const delivered = results.some((result) => result.status === 'fulfilled' && result.value);
   return delivered
-    ? json({ ok: true, message: messageCopy.success })
-    : json({ ok: false, message: messageCopy.failed }, 502);
+    ? respond({ ok: true, message: messageCopy.success })
+    : respond({ ok: false, message: messageCopy.failed }, 502);
 };

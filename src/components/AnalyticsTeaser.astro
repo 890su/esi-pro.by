@@ -1,4 +1,5 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
 import { analyticsCopy, analyticsSlug } from '../data/analytics';
 import { localizePath, type Locale } from '../data/i18n';
 interface Props { locale: Locale }
@@ -15,7 +16,7 @@ const copy = analyticsCopy[locale];
       <a class="arrow-link" href={localizePath(locale, analyticsSlug)}>{copy.read}<span aria-hidden="true">→</span></a>
     </div>
     <a class="analytics-teaser-image" href={localizePath(locale, analyticsSlug)} aria-label={copy.articleTitle}>
-      <img src="/images/analytics/sk-chamber.webp" width="500" height="249" alt={copy.captions[1]} loading="lazy" />
+      <ResponsiveImage src="/images/analytics/sk-chamber.webp" width="500" height="249" alt={copy.captions[1]} loading="lazy" />
     </a>
   </div>
 </section>
