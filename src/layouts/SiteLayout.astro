@@ -146,7 +146,7 @@ const structuredData = [
   </head>
   <body>
     <a class="skip-link" href="#main-content">{locale === 'en' ? 'Skip to main content' : locale === 'by' ? 'Перайсці да зместу' : 'Перейти к содержимому'}</a>
-    <Header locale={locale} currentSlug={currentSlug} />
+    <Header locale={locale} currentSlug={noindex ? '' : currentSlug} />
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
